@@ -1,0 +1,2529 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เว็บไซต์การแก้ไขปัญหาอินเทอร์เน็ตเบื้องต้น</title>
+    
+    <!-- Google Fonts: Prompt & Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'Kanit', 'sans-serif'],
+                    },
+                    colors: {
+                        sage: {
+                            50: '#F4F7F4',
+                            100: '#E5EDE6',
+                            200: '#DCE5DD',
+                            300: '#B8C9BA',
+                            400: '#8FA893',
+                            500: '#6E8C73',
+                            600: '#5E7863',
+                            700: '#495E4D',
+                            800: '#38483B',
+                            900: '#27332A',
+                        },
+                        cream: {
+                            50: '#FDFCFA',
+                            100: '#FAF8F3',
+                            200: '#F2EDE4',
+                            300: '#E6DEC8',
+                            400: '#D4C7A9',
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 30px -5px rgba(94, 120, 99, 0.08)',
+                        'card': '0 4px 20px -2px rgba(73, 94, 77, 0.06)',
+                        'hover': '0 15px 35px -5px rgba(94, 120, 99, 0.16)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF8F3;
+            color: #2D3830;
+            font-family: 'Prompt', 'Kanit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F3;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B8C9BA;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8FA893;
+        }
+
+        /* Animations */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.04); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-float {
+            animation: floatSlow 5s ease-in-out infinite;
+        }
+        .animate-pulse-glow {
+            animation: pulseGlow 3.5s ease-in-out infinite;
+        }
+        .fade-in {
+            animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .code-block {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-sage-200 selection:text-sage-900">
+
+    <!-- =====================================================================
+         1. WELCOME / SPLASH SCREEN (หน้าต้อนรับ - อ้างอิงสไตล์ภาพที่ 1: 41905_0.jpg)
+         ===================================================================== -->
+    <section id="welcome-view" class="min-h-screen w-full bg-gradient-to-br from-cream-100 via-white to-sage-100 flex flex-col justify-between relative overflow-hidden">
+        <!-- Decorative Soft Background Circles -->
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-sage-200/50 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-32 -right-24 w-[28rem] h-[28rem] bg-cream-300/60 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Top Mini Header -->
+        <header class="w-full max-w-7xl mx-auto px-6 py-5 flex items-center justify-between relative z-10">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-sage-600 text-white flex items-center justify-center shadow-soft">
+                    <i class="fa-solid fa-wifi text-lg"></i>
+                </div>
+                <span class="font-semibold text-sage-800 text-base sm:text-lg">NetCare Guide</span>
+            </div>
+            <button onclick="enterMainSite()" class="text-sm font-medium text-sage-700 hover:text-sage-900 bg-white/80 hover:bg-white px-4 py-2 rounded-full border border-sage-200 shadow-sm transition-all">
+                ข้ามไปหน้าหลัก <i class="fa-solid fa-arrow-right ml-1.5"></i>
+            </button>
+        </header>
+
+        <!-- Main Welcome Content -->
+        <main class="w-full max-w-7xl mx-auto px-6 py-8 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10 my-auto">
+            <!-- Left Text Column -->
+            <div class="lg:col-span-6 space-y-6 text-center lg:text-left fade-in">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sage-100 border border-sage-200 text-sage-700 text-xs sm:text-sm font-medium">
+                    <span class="w-2 h-2 rounded-full bg-sage-600 animate-ping"></span>
+                    ศูนย์รวมความรู้และคู่มือดูแลระบบเครือข่ายด้วยตนเอง
+                </div>
+                
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-sage-900 leading-tight tracking-tight">
+                    เว็บไซต์การแก้ไขปัญหา<br>
+                    <span class="text-sage-600">อินเทอร์เน็ตเบื้องต้น</span>
+                </h1>
+                
+                <p class="text-base sm:text-lg text-gray-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    แหล่งเรียนรู้และคู่มือวินิจฉัยปัญหาการเชื่อมต่ออินเทอร์เน็ตบนคอมพิวเตอร์อย่างเป็นขั้นตอน ตั้งแต่การตรวจสอบอุปกรณ์พื้นฐานไปจนถึงคำสั่งวิเคราะห์เครือข่าย เข้าใจง่าย ปลอดภัย และทำตามได้จริง
+                </p>
+
+                <!-- Quick Highlights -->
+                <div class="grid grid-cols-3 gap-3 max-w-md mx-auto lg:mx-0 pt-1">
+                    <div class="bg-white/90 p-3 rounded-2xl border border-sage-100 shadow-card text-center">
+                        <div class="text-sage-600 font-bold text-lg sm:text-xl">12+</div>
+                        <div class="text-xs text-gray-500">ปัญหาที่พบบ่อย</div>
+                    </div>
+                    <div class="bg-white/90 p-3 rounded-2xl border border-sage-100 shadow-card text-center">
+                        <div class="text-sage-600 font-bold text-lg sm:text-xl">8 ขั้นตอน</div>
+                        <div class="text-xs text-gray-500">วิเคราะห์อย่างปลอดภัย</div>
+                    </div>
+                    <div class="bg-white/90 p-3 rounded-2xl border border-sage-100 shadow-card text-center">
+                        <div class="text-sage-600 font-bold text-lg sm:text-xl">100%</div>
+                        <div class="text-xs text-gray-500">ใช้งานฟรี เข้าใจง่าย</div>
+                    </div>
+                </div>
+
+                <!-- Enter Website CTA -->
+                <div class="pt-3 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                    <button onclick="enterMainSite()" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-sage-600 hover:bg-sage-700 text-white font-semibold text-base sm:text-lg shadow-lg shadow-sage-600/25 hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-3 cursor-pointer">
+                        <span>ไปยังหน้าหลัก</span>
+                        <i class="fa-solid fa-circle-arrow-right text-xl"></i>
+                    </button>
+                    <button onclick="enterMainSite('problems-section')" class="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white hover:bg-cream-200 text-sage-800 font-medium text-base border border-sage-200 shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-magnifying-glass text-sage-600"></i>
+                        <span>ค้นหาวิธีแก้ปัญหาทันที</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Illustration Column (Styled after Image 1: Desktop Monitor with Globe & Wi-Fi, White Router, Coffee Mug, Plant in Sage-Cream-White) -->
+            <div class="lg:col-span-6 flex justify-center">
+                <div class="relative w-full max-w-xl bg-white/80 p-4 sm:p-6 rounded-3xl border border-sage-200/80 shadow-soft">
+                    <!-- Custom Detailed SVG Illustration matching Image 1 composition in Sage/Cream/White -->
+                    <svg viewBox="0 0 800 540" class="w-full h-auto rounded-2xl overflow-hidden" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="bgWall1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#E5EDE6"/>
+                                <stop offset="60%" stop-color="#FAF8F3"/>
+                                <stop offset="100%" stop-color="#DCE5DD"/>
+                            </linearGradient>
+                            <linearGradient id="screenGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#27332A"/>
+                                <stop offset="50%" stop-color="#38483B"/>
+                                <stop offset="100%" stop-color="#495E4D"/>
+                            </linearGradient>
+                            <radialGradient id="globeGlow" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#8FA893" stop-opacity="0.55"/>
+                                <stop offset="100%" stop-color="#8FA893" stop-opacity="0"/>
+                            </radialGradient>
+                            <linearGradient id="deskWood" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#E6DEC8"/>
+                                <stop offset="100%" stop-color="#D4C7A9"/>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Room Background -->
+                        <rect width="800" height="540" fill="url(#bgWall1)"/>
+                        
+                        <!-- Window Light Left -->
+                        <rect x="0" y="0" width="90" height="420" fill="#FFFFFF" opacity="0.65"/>
+                        <line x1="90" y1="0" x2="90" y2="420" stroke="#B8C9BA" stroke-width="4"/>
+
+                        <!-- Wall Poster "INTERNET Better Connection" -->
+                        <g transform="translate(115, 45)">
+                            <rect x="0" y="0" width="125" height="165" rx="10" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="2"/>
+                            <rect x="8" y="8" width="109" height="149" rx="6" fill="#5E7863"/>
+                            <text x="62" y="34" font-family="Prompt, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">INTERNET</text>
+                            <circle cx="62" cy="72" r="22" fill="none" stroke="#DCE5DD" stroke-width="2"/>
+                            <ellipse cx="62" cy="72" rx="10" ry="22" fill="none" stroke="#DCE5DD" stroke-width="1.5"/>
+                            <line x1="40" y1="72" x2="84" y2="72" stroke="#DCE5DD" stroke-width="1.5"/>
+                            <text x="20" y="116" font-family="Prompt, sans-serif" font-size="10" fill="#FAF8F3">Better</text>
+                            <text x="20" y="130" font-family="Prompt, sans-serif" font-size="10" fill="#FAF8F3">Connection</text>
+                            <text x="20" y="144" font-family="Prompt, sans-serif" font-size="9" fill="#DCE5DD">Safer Network</text>
+                        </g>
+
+                        <!-- Top Shelf & Cute Helper Bot -->
+                        <rect x="520" y="115" width="280" height="12" rx="4" fill="#D4C7A9"/>
+                        <!-- Mini Helper Robot -->
+                        <g transform="translate(650, 42)">
+                            <rect x="18" y="34" width="28" height="26" rx="8" fill="#FFFFFF" stroke="#8FA893" stroke-width="2"/>
+                            <rect x="12" y="8" width="40" height="28" rx="12" fill="#FFFFFF" stroke="#8FA893" stroke-width="2"/>
+                            <rect x="18" y="14" width="28" height="14" rx="6" fill="#38483B"/>
+                            <circle cx="26" cy="21" r="3" fill="#8FA893"/>
+                            <circle cx="38" cy="21" r="3" fill="#8FA893"/>
+                            <line x1="32" y1="8" x2="32" y2="1" stroke="#5E7863" stroke-width="2"/>
+                            <circle cx="32" cy="1" r="3" fill="#5E7863"/>
+                        </g>
+
+                        <!-- Desk Surface -->
+                        <polygon points="0,425 800,425 800,540 0,540" fill="url(#deskWood)"/>
+                        <line x1="0" y1="425" x2="800" y2="425" stroke="#C2B28F" stroke-width="3"/>
+
+                        <!-- Desk Mat -->
+                        <rect x="155" y="438" width="490" height="68" rx="14" fill="#38483B"/>
+
+                        <!-- Desktop Monitor Stand & Screen -->
+                        <rect x="372" y="370" width="56" height="58" fill="#B8C9BA"/>
+                        <rect x="330" y="422" width="140" height="10" rx="5" fill="#8FA893"/>
+                        <rect x="215" y="160" width="370" height="218" rx="16" fill="#27332A" stroke="#5E7863" stroke-width="4"/>
+                        <rect x="227" y="172" width="346" height="190" rx="10" fill="url(#screenGrad1)"/>
+
+                        <!-- Globe & Wi-Fi Inside Monitor -->
+                        <circle cx="400" cy="267" r="85" fill="url(#globeGlow)"/>
+                        <circle cx="400" cy="267" r="64" fill="#495E4D" stroke="#B8C9BA" stroke-width="2"/>
+                        <ellipse cx="400" cy="267" rx="32" ry="64" fill="none" stroke="#DCE5DD" stroke-width="1.5" opacity="0.7"/>
+                        <ellipse cx="400" cy="267" rx="54" ry="64" fill="none" stroke="#DCE5DD" stroke-width="1.2" opacity="0.5"/>
+                        <line x1="336" y1="267" x2="464" y2="267" stroke="#DCE5DD" stroke-width="1.5" opacity="0.7"/>
+                        <line x1="345" y1="240" x2="455" y2="240" stroke="#DCE5DD" stroke-width="1.2" opacity="0.5"/>
+                        <line x1="345" y1="294" x2="455" y2="294" stroke="#DCE5DD" stroke-width="1.2" opacity="0.5"/>
+                        
+                        <!-- Wi-Fi Waves Center Screen -->
+                        <path d="M 372 258 A 40 40 0 0 1 428 258" fill="none" stroke="#FAF8F3" stroke-width="5" stroke-linecap="round"/>
+                        <path d="M 382 271 A 26 26 0 0 1 418 271" fill="none" stroke="#FAF8F3" stroke-width="5" stroke-linecap="round"/>
+                        <circle cx="400" cy="285" r="5.5" fill="#FAF8F3"/>
+
+                        <!-- Floating Holographic Network Icons (Sage & White) -->
+                        <!-- Top Wi-Fi Badge -->
+                        <g class="animate-float" transform="translate(362, 56)">
+                            <path d="M 10 38 A 42 42 0 0 1 66 38" fill="none" stroke="#5E7863" stroke-width="6" stroke-linecap="round"/>
+                            <path d="M 20 50 A 28 28 0 0 1 56 50" fill="none" stroke="#5E7863" stroke-width="6" stroke-linecap="round"/>
+                            <circle cx="38" cy="63" r="6" fill="#5E7863"/>
+                        </g>
+
+                        <!-- Left Tools Badge -->
+                        <g transform="translate(185, 130)">
+                            <rect x="0" y="0" width="68" height="68" rx="16" fill="#FFFFFF" fill-opacity="0.92" stroke="#8FA893" stroke-width="2.5"/>
+                            <path d="M 24 24 L 44 44 M 44 24 L 24 44" stroke="#5E7863" stroke-width="5" stroke-linecap="round"/>
+                            <circle cx="54" cy="54" r="10" fill="#5E7863"/>
+                            <path d="M 49 54 L 53 58 L 59 50" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- Left Laptop Badge -->
+                        <g transform="translate(150, 250)">
+                            <rect x="0" y="0" width="66" height="62" rx="16" fill="#FFFFFF" fill-opacity="0.92" stroke="#8FA893" stroke-width="2.5"/>
+                            <rect x="17" y="18" width="32" height="20" rx="3" fill="none" stroke="#5E7863" stroke-width="2.5"/>
+                            <line x1="12" y1="42" x2="54" y2="42" stroke="#5E7863" stroke-width="3" stroke-linecap="round"/>
+                            <circle cx="52" cy="48" r="9" fill="#5E7863"/>
+                            <path d="M 48 48 L 51 51 L 56 45" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- Right Globe Badge -->
+                        <g transform="translate(555, 135)">
+                            <rect x="0" y="0" width="68" height="68" rx="16" fill="#FFFFFF" fill-opacity="0.92" stroke="#8FA893" stroke-width="2.5"/>
+                            <circle cx="34" cy="34" r="18" fill="none" stroke="#5E7863" stroke-width="2.5"/>
+                            <ellipse cx="34" cy="34" rx="8" ry="18" fill="none" stroke="#5E7863" stroke-width="2"/>
+                            <line x1="16" y1="34" x2="52" y2="34" stroke="#5E7863" stroke-width="2"/>
+                        </g>
+
+                        <!-- Right Signal Bars Badge -->
+                        <g transform="translate(585, 255)">
+                            <rect x="0" y="0" width="66" height="62" rx="16" fill="#FFFFFF" fill-opacity="0.92" stroke="#8FA893" stroke-width="2.5"/>
+                            <rect x="16" y="36" width="6" height="12" rx="2" fill="#8FA893"/>
+                            <rect x="26" y="29" width="6" height="19" rx="2" fill="#8FA893"/>
+                            <rect x="36" y="22" width="6" height="26" rx="2" fill="#5E7863"/>
+                            <rect x="46" y="15" width="6" height="33" rx="2" fill="#5E7863"/>
+                        </g>
+
+                        <!-- White Wi-Fi Router on Left Desk -->
+                        <g transform="translate(105, 325)">
+                            <!-- Antennas -->
+                            <rect x="18" y="0" width="6" height="65" rx="3" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="1.5"/>
+                            <rect x="52" y="6" width="6" height="59" rx="3" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="1.5"/>
+                            <rect x="86" y="0" width="6" height="65" rx="3" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="1.5"/>
+                            <!-- Router Body -->
+                            <rect x="4" y="60" width="102" height="36" rx="10" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="2"/>
+                            <!-- LED Status Lights -->
+                            <circle cx="24" cy="78" r="3" fill="#5E7863"/>
+                            <circle cx="38" cy="78" r="3" fill="#5E7863"/>
+                            <circle cx="52" cy="78" r="3" fill="#5E7863"/>
+                            <circle cx="66" cy="78" r="3" fill="#8FA893"/>
+                            <circle cx="80" cy="78" r="3" fill="#5E7863"/>
+                        </g>
+
+                        <!-- Potted Plant Left -->
+                        <g transform="translate(22, 275)">
+                            <path d="M 40 80 Q 15 45 25 20 Q 45 45 45 80 Z" fill="#5E7863"/>
+                            <path d="M 45 80 Q 45 30 62 12 Q 68 45 50 80 Z" fill="#8FA893"/>
+                            <path d="M 50 80 Q 75 45 82 28 Q 62 55 52 80 Z" fill="#495E4D"/>
+                            <path d="M 22 80 L 74 80 L 66 142 L 30 142 Z" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="2"/>
+                        </g>
+
+                        <!-- Keyboard & Mouse -->
+                        <rect x="275" y="452" width="225" height="38" rx="8" fill="#5E7863" stroke="#8FA893" stroke-width="1.5"/>
+                        <line x1="288" y1="463" x2="486" y2="463" stroke="#DCE5DD" stroke-width="3" stroke-dasharray="10 5"/>
+                        <line x1="288" y1="473" x2="486" y2="473" stroke="#DCE5DD" stroke-width="3" stroke-dasharray="12 5"/>
+                        <line x1="315" y1="483" x2="455" y2="483" stroke="#DCE5DD" stroke-width="3"/>
+                        
+                        <ellipse cx="555" cy="472" rx="22" ry="14" fill="#5E7863" stroke="#8FA893" stroke-width="2"/>
+                        <line x1="555" y1="458" x2="555" y2="470" stroke="#DCE5DD" stroke-width="2"/>
+
+                        <!-- White Mug "Stay Connected" Right -->
+                        <g transform="translate(658, 345)">
+                            <path d="M 66 20 C 84 20, 84 58, 66 58" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/>
+                            <rect x="6" y="8" width="62" height="72" rx="10" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="2"/>
+                            <path d="M 24 32 A 18 18 0 0 1 50 32" fill="none" stroke="#5E7863" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M 29 38 A 11 11 0 0 1 45 38" fill="none" stroke="#5E7863" stroke-width="3" stroke-linecap="round"/>
+                            <circle cx="37" cy="44" r="2.5" fill="#5E7863"/>
+                            <text x="37" y="59" font-family="Prompt, sans-serif" font-size="8.5" font-weight="600" fill="#38483B" text-anchor="middle">Stay</text>
+                            <text x="37" y="69" font-family="Prompt, sans-serif" font-size="8.5" font-weight="600" fill="#38483B" text-anchor="middle">Connected</text>
+                        </g>
+                    </svg>
+
+                    <!-- Floating Bottom Caption -->
+                    <div class="mt-3 flex items-center justify-between px-2 text-xs sm:text-sm text-sage-700">
+                        <span class="flex items-center gap-2 font-medium">
+                            <i class="fa-solid fa-shield-check text-sage-600"></i>
+                            วิเคราะห์สาเหตุและแก้ไขได้ด้วยตนเอง
+                        </span>
+                        <span class="text-sage-500">โทนสีสบายตา อ่านง่าย</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer Note on Welcome Page -->
+        <footer class="w-full text-center py-4 text-xs text-sage-600 relative z-10">
+            กดปุ่ม <strong class="font-semibold">"ไปยังหน้าหลัก"</strong> เพื่อเข้าสู่ระบบค้นหาและฐานข้อมูลการแก้ไขปัญหาอินเทอร์เน็ต
+        </footer>
+    </section>
+
+    <!-- =====================================================================
+         2. MAIN APPLICATION SHELL (ซ่อนไว้จนกว่าจะกดเข้าหน้าหลัก)
+         ===================================================================== -->
+    <div id="main-app" class="hidden min-h-screen flex flex-col">
+        
+        <!-- STICKY TOP NAVBAR -->
+        <nav class="sticky top-0 z-40 glass-nav border-b border-sage-200/80 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16 md:h-20 gap-3">
+                    
+                    <!-- Brand Logo -->
+                    <button onclick="navigateToHome()" class="flex items-center gap-2.5 text-left group focus:outline-none shrink-0 cursor-pointer">
+                        <div class="w-10 h-10 rounded-xl bg-sage-600 group-hover:bg-sage-700 text-white flex items-center justify-center shadow-sm transition-colors">
+                            <i class="fa-solid fa-wifi text-base"></i>
+                        </div>
+                        <div class="hidden sm:block">
+                            <div class="font-bold text-sage-900 text-sm md:text-base leading-tight">แก้ไขปัญหาอินเทอร์เน็ต</div>
+                            <div class="text-[11px] text-sage-600">คู่มือดูแลเครือข่ายเบื้องต้น</div>
+                        </div>
+                    </button>
+
+                    <!-- Desktop Menu Links -->
+                    <div class="hidden lg:flex items-center gap-1 bg-cream-100 p-1.5 rounded-2xl border border-sage-200/70">
+                        <button onclick="showWelcomePage()" class="px-3.5 py-2 rounded-xl text-sm font-medium text-sage-700 hover:bg-white hover:text-sage-900 transition-all cursor-pointer">
+                            <i class="fa-solid fa-door-open mr-1 text-sage-500"></i> หน้าแรก
+                        </button>
+                        <button onclick="navigateToHome()" id="nav-home" class="px-3.5 py-2 rounded-xl text-sm font-semibold bg-white text-sage-800 shadow-sm transition-all cursor-pointer">
+                            หน้าหลัก
+                        </button>
+                        <button onclick="navigateToSection('categories-section')" id="nav-categories" class="px-3.5 py-2 rounded-xl text-sm font-medium text-sage-700 hover:bg-white hover:text-sage-900 transition-all cursor-pointer">
+                            หมวดหมู่
+                        </button>
+                        <button onclick="navigateToSection('articles-section')" id="nav-articles" class="px-3.5 py-2 rounded-xl text-sm font-medium text-sage-700 hover:bg-white hover:text-sage-900 transition-all cursor-pointer">
+                            บทความ
+                        </button>
+                        <button onclick="navigateToSection('about-section')" id="nav-about" class="px-3.5 py-2 rounded-xl text-sm font-medium text-sage-700 hover:bg-white hover:text-sage-900 transition-all cursor-pointer">
+                            เกี่ยวกับเรา
+                        </button>
+                    </div>
+
+                    <!-- Real-time Search Bar -->
+                    <div class="flex-1 max-w-xs sm:max-w-sm md:max-w-md relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-sage-500 text-sm"></i>
+                        <input 
+                            type="text" 
+                            id="global-search-input" 
+                            oninput="handleSearch(this.value)"
+                            placeholder="ค้นหาปัญหา เช่น Wi-Fi หลุด, DNS, IPv4..." 
+                            class="w-full pl-10 pr-9 py-2.5 rounded-2xl bg-cream-100 focus:bg-white border border-sage-200 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 text-sm text-gray-800 placeholder-sage-500 outline-none transition-all"
+                        >
+                        <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sage-700">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button onclick="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-xl bg-cream-100 border border-sage-200 text-sage-800 hover:bg-sage-100">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Dropdown Menu -->
+            <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-sage-100 px-4 pt-2 pb-4 space-y-1.5 shadow-lg">
+                <button onclick="showWelcomePage(); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-sage-700 hover:bg-sage-50 flex items-center gap-2">
+                    <i class="fa-solid fa-door-open text-sage-500 w-5"></i> หน้าแรก (หน้าต้อนรับ)
+                </button>
+                <button onclick="navigateToHome(); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold bg-sage-50 text-sage-800 flex items-center gap-2">
+                    <i class="fa-solid fa-house text-sage-600 w-5"></i> หน้าหลัก
+                </button>
+                <button onclick="navigateToSection('categories-section'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-sage-700 hover:bg-sage-50 flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-sage-500 w-5"></i> หมวดหมู่ปัญหา
+                </button>
+                <button onclick="navigateToSection('articles-section'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-sage-700 hover:bg-sage-50 flex items-center gap-2">
+                    <i class="fa-solid fa-book-open text-sage-500 w-5"></i> บทความและความรู้
+                </button>
+                <button onclick="navigateToSection('about-section'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-sage-700 hover:bg-sage-50 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-sage-500 w-5"></i> เกี่ยวกับเรา
+                </button>
+            </div>
+        </nav>
+
+        <!-- =================================================================
+             VIEW A: HOME CONTENT VIEW (หน้าหลัก, หมวดหมู่, การ์ดปัญหา, บทความ, เกี่ยวกับเรา)
+             ================================================================= -->
+        <div id="home-content-view" class="flex-1">
+            
+            <!-- HERO SECTION (อ้างอิงสไตล์ภาพที่ 2: 41906_0.jpg โน้ตบุ๊กเปิดหน้าจอโลกและ Wi-Fi คู่กับเราเตอร์สีขาว) -->
+            <section class="relative bg-gradient-to-b from-white via-cream-100 to-cream-100 pt-8 pb-12 md:pt-12 md:pb-16 border-b border-sage-200/60">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 md:p-10 border border-sage-200/80 shadow-soft grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        
+                        <!-- Hero Left Text -->
+                        <div class="lg:col-span-6 space-y-5">
+                            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sage-100 text-sage-700 text-xs font-semibold">
+                                <i class="fa-solid fa-laptop-code"></i>
+                                คู่มือแก้ไขปัญหาอินเทอร์เน็ตบนคอมพิวเตอร์
+                            </div>
+                            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-sage-900 leading-snug">
+                                เว็บไซต์การแก้ไขปัญหา<span class="text-sage-600">อินเทอร์เน็ตเบื้องต้น</span>
+                            </h1>
+                            <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                                อินเทอร์เน็ตช้า เชื่อมต่อ Wi-Fi ไม่ได้ หรือขึ้น No Internet? ค้นหาอาการที่คุณพบเพื่อดูวิธีแก้ไขทีละขั้นตอนจากง่ายไปซับซ้อน พร้อมคำสั่งตรวจสอบเครือข่ายที่ใช้งานได้จริง
+                            </p>
+                            
+                            <!-- Action Buttons -->
+                            <div class="pt-2 flex flex-wrap items-center gap-3">
+                                <button onclick="focusSearchAndScroll()" class="px-6 py-3.5 rounded-2xl bg-sage-600 hover:bg-sage-700 text-white font-semibold text-sm sm:text-base shadow-md hover:shadow-lg transition-all flex items-center gap-2.5 cursor-pointer">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <span>เริ่มค้นหาปัญหา</span>
+                                </button>
+                                <button onclick="navigateToSection('categories-section')" class="px-5 py-3.5 rounded-2xl bg-cream-100 hover:bg-sage-100 text-sage-800 font-medium text-sm sm:text-base border border-sage-200 transition-all flex items-center gap-2 cursor-pointer">
+                                    <i class="fa-solid fa-grid-2"></i>
+                                    <span>เลือกตามหมวดหมู่</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hero Right Image (Styled after Image 2: Laptop with Globe & Wi-Fi + White Router on Desk) -->
+                        <div class="lg:col-span-6">
+                            <div class="rounded-2xl overflow-hidden border border-sage-200 bg-cream-50 shadow-inner">
+                                <svg viewBox="0 0 800 470" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <linearGradient id="hero2Wall" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#DCE5DD"/>
+                                            <stop offset="50%" stop-color="#FAF8F3"/>
+                                            <stop offset="100%" stop-color="#E5EDE6"/>
+                                        </linearGradient>
+                                        <linearGradient id="laptopScreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#27332A"/>
+                                            <stop offset="60%" stop-color="#38483B"/>
+                                            <stop offset="100%" stop-color="#5E7863"/>
+                                        </linearGradient>
+                                        <linearGradient id="desk2Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#E6DEC8"/>
+                                            <stop offset="100%" stop-color="#D4C7A9"/>
+                                        </linearGradient>
+                                    </defs>
+
+                                    <!-- Background -->
+                                    <rect width="800" height="470" fill="url(#hero2Wall)"/>
+                                    <!-- Soft Window Blinds Left -->
+                                    <rect x="0" y="0" width="130" height="350" fill="#FFFFFF" opacity="0.55"/>
+                                    <line x1="0" y1="60" x2="130" y2="60" stroke="#DCE5DD" stroke-width="3"/>
+                                    <line x1="0" y1="120" x2="130" y2="120" stroke="#DCE5DD" stroke-width="3"/>
+                                    <line x1="0" y1="180" x2="130" y2="180" stroke="#DCE5DD" stroke-width="3"/>
+
+                                    <!-- Desk Surface -->
+                                    <polygon points="0,355 800,355 800,470 0,470" fill="url(#desk2Grad)"/>
+                                    <line x1="0" y1="355" x2="800" y2="355" stroke="#C4B595" stroke-width="3"/>
+
+                                    <!-- Left Plant & Pen Cup -->
+                                    <g transform="translate(28, 175)">
+                                        <path d="M 35 75 Q 10 40 20 15 Q 42 40 42 75 Z" fill="#5E7863"/>
+                                        <path d="M 42 75 Q 42 25 60 8 Q 66 42 48 75 Z" fill="#8FA893"/>
+                                        <path d="M 48 75 Q 72 42 80 24 Q 60 52 50 75 Z" fill="#495E4D"/>
+                                        <rect x="18" y="75" width="54" height="62" rx="8" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="2"/>
+                                    </g>
+                                    <g transform="translate(65, 255)">
+                                        <line x1="16" y1="0" x2="22" y2="45" stroke="#38483B" stroke-width="4" stroke-linecap="round"/>
+                                        <line x1="32" y1="-5" x2="30" y2="45" stroke="#5E7863" stroke-width="4" stroke-linecap="round"/>
+                                        <line x1="46" y1="2" x2="38" y2="45" stroke="#8FA893" stroke-width="4" stroke-linecap="round"/>
+                                        <rect x="10" y="38" width="44" height="58" rx="8" fill="#FAF8F3" stroke="#B8C9BA" stroke-width="2"/>
+                                    </g>
+
+                                    <!-- Laptop (Center-Left Angled Perspective like Image 2) -->
+                                    <g transform="translate(155, 115)">
+                                        <!-- Screen Lid -->
+                                        <rect x="20" y="0" width="320" height="215" rx="14" fill="#27332A" stroke="#5E7863" stroke-width="3"/>
+                                        <rect x="30" y="10" width="300" height="193" rx="8" fill="url(#laptopScreenGrad)"/>
+                                        
+                                        <!-- Digital Globe & Wi-Fi Inside Laptop Screen -->
+                                        <circle cx="175" cy="108" r="68" fill="#495E4D" stroke="#DCE5DD" stroke-width="1.8"/>
+                                        <ellipse cx="175" cy="108" rx="34" ry="68" fill="none" stroke="#DCE5DD" stroke-width="1.4" opacity="0.75"/>
+                                        <ellipse cx="175" cy="108" rx="56" ry="68" fill="none" stroke="#DCE5DD" stroke-width="1" opacity="0.5"/>
+                                        <line x1="107" y1="108" x2="243" y2="108" stroke="#DCE5DD" stroke-width="1.4" opacity="0.75"/>
+                                        <line x1="118" y1="80" x2="232" y2="80" stroke="#DCE5DD" stroke-width="1.2" opacity="0.5"/>
+                                        <line x1="118" y1="136" x2="232" y2="136" stroke="#DCE5DD" stroke-width="1.2" opacity="0.5"/>
+
+                                        <!-- Wi-Fi Icon Overlay on Globe -->
+                                        <path d="M 145 102 A 42 42 0 0 1 205 102" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+                                        <path d="M 155 116 A 28 28 0 0 1 195 116" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+                                        <path d="M 165 130 A 14 14 0 0 1 185 130" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+                                        <circle cx="175" cy="143" r="5.5" fill="#FFFFFF"/>
+
+                                        <!-- Laptop Keyboard Base -->
+                                        <polygon points="20,215 340,215 445,268 85,268" fill="#DCE5DD" stroke="#8FA893" stroke-width="2"/>
+                                        <polygon points="85,268 445,268 445,278 85,278" fill="#8FA893"/>
+                                        <!-- Keyboard Keys Area -->
+                                        <polygon points="55,222 325,222 395,253 105,253" fill="#38483B"/>
+                                    </g>
+
+                                    <!-- Mouse Foreground Left -->
+                                    <g transform="translate(80, 385)">
+                                        <rect x="0" y="15" width="175" height="45" rx="14" fill="#38483B"/>
+                                        <ellipse cx="90" cy="24" rx="46" ry="20" fill="#5E7863" stroke="#DCE5DD" stroke-width="2"/>
+                                        <line x1="90" y1="4" x2="90" y2="22" stroke="#FAF8F3" stroke-width="2.5"/>
+                                    </g>
+
+                                    <!-- White Router on Right Desk (like Image 2) -->
+                                    <g transform="translate(570, 215)">
+                                        <rect x="42" y="0" width="8" height="105" rx="4" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="1.5"/>
+                                        <rect x="145" y="-12" width="8" height="117" rx="4" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="1.5"/>
+                                        <rect x="10" y="98" width="175" height="48" rx="12" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="2"/>
+                                        <rect x="10" y="132" width="175" height="14" rx="6" fill="#E5EDE6"/>
+                                        <!-- Status LEDs -->
+                                        <circle cx="42" cy="120" r="3.5" fill="#5E7863"/>
+                                        <circle cx="64" cy="120" r="3.5" fill="#5E7863"/>
+                                        <circle cx="86" cy="120" r="3.5" fill="#5E7863"/>
+                                        <circle cx="108" cy="120" r="3.5" fill="#8FA893"/>
+                                        <circle cx="130" cy="120" r="3.5" fill="#5E7863"/>
+                                    </g>
+
+                                    <!-- Floating Connected Nodes (Cloud, Mail, Gear, Search, Monitor, Globe, Wi-Fi) -->
+                                    <g stroke="#8FA893" stroke-width="1.8" fill="none" stroke-dasharray="5 5">
+                                        <path d="M 320 95 Q 430 45 530 95"/>
+                                        <path d="M 430 140 Q 530 130 630 165"/>
+                                    </g>
+
+                                    <!-- Cloud Icon -->
+                                    <g transform="translate(275, 42)">
+                                        <rect x="0" y="0" width="62" height="52" rx="14" fill="#FFFFFF" stroke="#8FA893" stroke-width="2"/>
+                                        <path d="M 20 34 H 42 A 8 8 0 0 0 42 18 A 11 11 0 0 0 21 20 A 7 7 0 0 0 20 34 Z" fill="none" stroke="#5E7863" stroke-width="2.5"/>
+                                    </g>
+
+                                    <!-- Gear / Settings Icon -->
+                                    <g transform="translate(462, 130)">
+                                        <rect x="0" y="0" width="54" height="54" rx="14" fill="#FFFFFF" stroke="#8FA893" stroke-width="2"/>
+                                        <circle cx="27" cy="27" r="9" fill="none" stroke="#5E7863" stroke-width="3"/>
+                                        <circle cx="27" cy="27" r="14" fill="none" stroke="#5E7863" stroke-width="3" stroke-dasharray="4 4"/>
+                                    </g>
+
+                                    <!-- Globe Icon -->
+                                    <g transform="translate(590, 68)">
+                                        <rect x="0" y="0" width="60" height="60" rx="15" fill="#FFFFFF" stroke="#8FA893" stroke-width="2"/>
+                                        <circle cx="30" cy="30" r="16" fill="none" stroke="#5E7863" stroke-width="2.2"/>
+                                        <ellipse cx="30" cy="30" rx="7" ry="16" fill="none" stroke="#5E7863" stroke-width="1.8"/>
+                                        <line x1="14" y1="30" x2="46" y2="30" stroke="#5E7863" stroke-width="1.8"/>
+                                    </g>
+
+                                    <!-- Wi-Fi Badge above Router -->
+                                    <g transform="translate(668, 128)" class="animate-float">
+                                        <circle cx="30" cy="30" r="28" fill="#5E7863"/>
+                                        <path d="M 16 28 A 20 20 0 0 1 44 28" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+                                        <path d="M 21 35 A 13 13 0 0 1 39 35" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+                                        <circle cx="30" cy="42" r="3" fill="#FFFFFF"/>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. CATEGORIES SECTION (แถบหมวดหมู่แบบการ์ดสีพาสเทล) -->
+            <section id="categories-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-2">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-sage-600">หมวดหมู่ปัญหา</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-sage-900 mt-1">เลือกประเภทปัญหาที่พบ</h2>
+                    </div>
+                    <p class="text-sm text-gray-500">คลิกที่การ์ดหมวดหมู่เพื่อกรองรายการปัญหาที่เกี่ยวข้อง</p>
+                </div>
+
+                <!-- Category Cards Grid -->
+                <div id="category-cards-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 sm:gap-4">
+                    <!-- Rendered dynamically via JavaScript -->
+                </div>
+            </section>
+
+            <!-- 3. PROBLEM CARDS SECTION (ส่วนแสดงปัญหา) -->
+            <section id="problems-section" class="py-6 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 bg-white p-4 sm:p-5 rounded-2xl border border-sage-200/80 shadow-card">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sage-100 text-sage-700 flex items-center justify-center">
+                            <i class="fa-solid fa-stethoscope"></i>
+                        </div>
+                        <div>
+                            <h3 id="problems-list-title" class="font-bold text-sage-900 text-lg">รายการปัญหาการเชื่อมต่อทั้งหมด</h3>
+                            <p id="problems-count-text" class="text-xs sm:text-sm text-gray-500">แสดงทั้งหมด 12 หัวข้อ</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="reset-filter-btn" onclick="resetFilters()" class="hidden px-4 py-2 rounded-xl bg-cream-200 hover:bg-sage-200 text-sage-800 text-xs sm:text-sm font-medium transition-colors cursor-pointer">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> แสดงทั้งหมด
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Empty Search State -->
+                <div id="no-results-box" class="hidden bg-white rounded-3xl p-10 text-center border border-sage-200 shadow-card my-6">
+                    <div class="w-16 h-16 rounded-full bg-cream-200 text-sage-600 flex items-center justify-center mx-auto mb-4 text-2xl">
+                        <i class="fa-solid fa-magnifying-glass-minus"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-sage-900">ไม่พบปัญหาที่ตรงกับคำค้นหา</h4>
+                    <p class="text-sm text-gray-500 mt-1 max-w-md mx-auto">ลองค้นหาด้วยคำสั้น ๆ เช่น "Wi-Fi", "ช้า", "DNS", "IPv4", "Gateway" หรือ "Hotspot"</p>
+                    <button onclick="resetFilters()" class="mt-5 px-6 py-2.5 rounded-xl bg-sage-600 text-white text-sm font-medium hover:bg-sage-700 transition-colors cursor-pointer">
+                        ดูปัญหาทั้งหมด
+                    </button>
+                </div>
+
+                <!-- Problem Cards Grid -->
+                <div id="problem-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Rendered dynamically via JavaScript -->
+                </div>
+            </section>
+
+            <!-- 4. KNOWLEDGE & ARTICLES SECTION (ความรู้เกี่ยวกับอินเทอร์เน็ต & บทความแนะนำ) -->
+            <section id="articles-section" class="py-14 bg-white border-t border-b border-sage-200/70">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-2xl mx-auto mb-10">
+                        <span class="px-3.5 py-1 rounded-full bg-sage-100 text-sage-700 text-xs font-semibold">คลังความรู้เครือข่าย</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-sage-900 mt-3">ความรู้เกี่ยวกับอินเทอร์เน็ตและบทความแนะนำ</h2>
+                        <p class="text-sm sm:text-base text-gray-600 mt-2">
+                            ปูพื้นฐานความเข้าใจเกี่ยวกับการทำงานของระบบเครือข่าย Wi-Fi เราเตอร์ และหลักการแก้ไขปัญหาอย่างปลอดภัย
+                        </p>
+                    </div>
+
+                    <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Rendered dynamically via JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. ABOUT US & SAFE TROUBLESHOOTING PRINCIPLES (เกี่ยวกับเรา) -->
+            <section id="about-section" class="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-gradient-to-br from-sage-50 via-white to-cream-100 rounded-3xl p-6 sm:p-10 border border-sage-200 shadow-soft">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-7 space-y-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sage-200/70 text-sage-800 text-xs font-semibold">
+                                <i class="fa-solid fa-heart-pulse"></i> เกี่ยวกับเว็บไซต์ของเรา
+                            </span>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-sage-900">
+                                มุ่งเน้นการแก้ไขปัญหาอย่างเป็นระบบ เข้าใจง่าย และปลอดภัยต่ออุปกรณ์
+                            </h2>
+                            <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                                <strong>เว็บไซต์การแก้ไขปัญหาอินเทอร์เน็ตเบื้องต้น</strong> จัดทำขึ้นเพื่อช่วยให้ผู้ใช้งานคอมพิวเตอร์ทั่วไปสามารถตรวจสอบและแก้ไขปัญหาการเชื่อมต่ออินเทอร์เน็ตได้ด้วยตนเองอย่างถูกต้องตามหลักวิชาการ โดยจัดลำดับขั้นตอนจากวิธีพื้นฐานที่ไม่กระทบต่อการตั้งค่าของระบบ ไปจนถึงการใช้คำสั่งวินิจฉัยเครือข่ายมาตรฐาน
+                            </p>
+
+                            <!-- Safety Principles Box -->
+                            <div class="bg-white/90 rounded-2xl p-5 border border-sage-200 space-y-3 mt-4">
+                                <h3 class="font-bold text-sage-800 text-base flex items-center gap-2">
+                                    <i class="fa-solid fa-shield-halved text-sage-600"></i>
+                                    หลักการและข้อควรระวังในการแก้ไขปัญหาของเรา
+                                </h3>
+                                <ul class="space-y-2 text-xs sm:text-sm text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check-circle text-sage-600 mt-1"></i>
+                                        <span><strong>เรียงจากง่ายไปซับซ้อน:</strong> เริ่มจากการตรวจอุปกรณ์อื่น สายสัญญาณ และการรีสตาร์ตก่อนปรับค่าเชิงลึก</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check-circle text-sage-600 mt-1"></i>
+                                        <span><strong>หลีกเลี่ยง Factory Reset โดยไม่จำเป็น:</strong> เพื่อป้องกันค่าตั้งต้นของผู้ให้บริการ (ISP) และรหัสผ่าน Wi-Fi สูญหาย</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check-circle text-sage-600 mt-1"></i>
+                                        <span><strong>รักษาความปลอดภัยของระบบ:</strong> ไม่แนะนำให้ปิด Firewall หรือระบบป้องกันไวรัสโดยไม่มีเหตุผลอันควร</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Right Visual Card -->
+                        <div class="lg:col-span-5">
+                            <div class="bg-white rounded-2xl p-6 border border-sage-200 shadow-card space-y-5">
+                                <div class="flex items-center gap-3 pb-4 border-b border-sage-100">
+                                    <div class="w-12 h-12 rounded-2xl bg-sage-600 text-white flex items-center justify-center text-xl">
+                                        <i class="fa-solid fa-list-check"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-sage-900">โครงสร้าง 8 ขั้นตอนมาตรฐาน</h4>
+                                        <p class="text-xs text-gray-500">ใช้เป็นแนวทางหลักในทุกบทความแก้ไขปัญหา</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 gap-2.5 text-xs sm:text-sm">
+                                    <div class="flex items-center gap-3 p-2.5 rounded-xl bg-cream-100">
+                                        <span class="w-6 h-6 rounded-full bg-sage-600 text-white flex items-center justify-center text-xs font-bold shrink-0">1</span>
+                                        <span class="text-gray-700 font-medium">ตรวจสอบการเชื่อมต่อกับอุปกรณ์อื่น</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-2.5 rounded-xl bg-cream-100">
+                                        <span class="w-6 h-6 rounded-full bg-sage-600 text-white flex items-center justify-center text-xs font-bold shrink-0">2</span>
+                                        <span class="text-gray-700 font-medium">ตรวจสอบสาย LAN และไฟสถานะเราเตอร์</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-2.5 rounded-xl bg-cream-100">
+                                        <span class="w-6 h-6 rounded-full bg-sage-600 text-white flex items-center justify-center text-xs font-bold shrink-0">3</span>
+                                        <span class="text-gray-700 font-medium">ปิด-เปิดการเชื่อมต่อ Wi-Fi / LAN ใหม่</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-2.5 rounded-xl bg-cream-100">
+                                        <span class="w-6 h-6 rounded-full bg-sage-600 text-white flex items-center justify-center text-xs font-bold shrink-0">4</span>
+                                        <span class="text-gray-700 font-medium">รีสตาร์ตคอมพิวเตอร์หรือเราเตอร์อย่างปลอดภัย</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-2.5 rounded-xl bg-cream-100">
+                                        <span class="w-6 h-6 rounded-full bg-sage-600 text-white flex items-center justify-center text-xs font-bold shrink-0">5</span>
+                                        <span class="text-gray-700 font-medium">ใช้เครื่องมือ Windows Network Troubleshooter</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-2.5 rounded-xl bg-cream-100">
+                                        <span class="w-6 h-6 rounded-full bg-sage-600 text-white flex items-center justify-center text-xs font-bold shrink-0">6</span>
+                                        <span class="text-gray-700 font-medium">ตรวจสอบค่า IP, DNS, Proxy และ VPN</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-2.5 rounded-xl bg-cream-100">
+                                        <span class="w-6 h-6 rounded-full bg-sage-600 text-white flex items-center justify-center text-xs font-bold shrink-0">7</span>
+                                        <span class="text-gray-700 font-medium">ใช้คำสั่งตรวจสอบเครือข่าย (Command Prompt)</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-2.5 rounded-xl bg-cream-100">
+                                        <span class="w-6 h-6 rounded-full bg-sage-600 text-white flex items-center justify-center text-xs font-bold shrink-0">8</span>
+                                        <span class="text-gray-700 font-medium">แนวทางตรวจสอบเพิ่มเติมและติดต่อ ISP</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- =================================================================
+             VIEW B: PROBLEM DETAILS VIEW (หน้าแสดงรายละเอียดปัญหา)
+             ================================================================= -->
+        <div id="problem-detail-view" class="hidden flex-1 py-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full fade-in">
+            <!-- Top Navigation Bar inside Detail View -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+                <div class="flex items-center gap-2.5">
+                    <button onclick="closeDetailView()" class="px-4 py-2.5 rounded-xl bg-white hover:bg-sage-100 text-sage-800 border border-sage-200 font-medium text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-arrow-left text-sage-600"></i>
+                        <span>ย้อนกลับ</span>
+                    </button>
+                    <button onclick="navigateToHome()" class="px-4 py-2.5 rounded-xl bg-sage-600 hover:bg-sage-700 text-white font-medium text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-house"></i>
+                        <span>กลับหน้าหลัก</span>
+                    </button>
+                </div>
+                <span id="detail-category-badge" class="px-3.5 py-1.5 rounded-full bg-sage-100 text-sage-800 text-xs font-semibold border border-sage-200">
+                    หมวดหมู่
+                </span>
+            </div>
+
+            <!-- Main Detail Card -->
+            <article id="problem-detail-content" class="bg-white rounded-3xl border border-sage-200 shadow-soft overflow-hidden">
+                <!-- Populated dynamically via JS -->
+            </article>
+        </div>
+
+        <!-- =================================================================
+             VIEW C: ARTICLE DETAIL VIEW (หน้าอ่านบทความ)
+             ================================================================= -->
+        <div id="article-detail-view" class="hidden flex-1 py-8 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full fade-in">
+            <div class="flex items-center gap-2.5 mb-6">
+                <button onclick="closeArticleView()" class="px-4 py-2.5 rounded-xl bg-white hover:bg-sage-100 text-sage-800 border border-sage-200 font-medium text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left text-sage-600"></i>
+                    <span>ย้อนกลับ</span>
+                </button>
+                <button onclick="navigateToHome()" class="px-4 py-2.5 rounded-xl bg-sage-600 hover:bg-sage-700 text-white font-medium text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-house"></i>
+                    <span>กลับหน้าหลัก</span>
+                </button>
+            </div>
+            <article id="article-detail-content" class="bg-white rounded-3xl border border-sage-200 shadow-soft overflow-hidden">
+                <!-- Populated dynamically via JS -->
+            </article>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="bg-sage-800 text-cream-100 mt-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-sage-700 pb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sage-600 text-white flex items-center justify-center">
+                            <i class="fa-solid fa-wifi"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-white text-base">เว็บไซต์การแก้ไขปัญหาอินเทอร์เน็ตเบื้องต้น</div>
+                            <div class="text-xs text-sage-300">คู่มือการวิเคราะห์และแก้ไขปัญหาการเชื่อมต่อเครือข่ายบนคอมพิวเตอร์</div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-4 text-sm text-sage-200">
+                        <button onclick="showWelcomePage()" class="hover:text-white transition-colors cursor-pointer">หน้าแรก</button>
+                        <button onclick="navigateToHome()" class="hover:text-white transition-colors cursor-pointer">หน้าหลัก</button>
+                        <button onclick="navigateToSection('categories-section')" class="hover:text-white transition-colors cursor-pointer">หมวดหมู่</button>
+                        <button onclick="navigateToSection('articles-section')" class="hover:text-white transition-colors cursor-pointer">บทความ</button>
+                        <button onclick="navigateToSection('about-section')" class="hover:text-white transition-colors cursor-pointer">เกี่ยวกับเรา</button>
+                    </div>
+                </div>
+                <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-sage-300 gap-2">
+                    <p>© 2026 เว็บไซต์การแก้ไขปัญหาอินเทอร์เน็ตเบื้องต้น — พัฒนาเพื่อการศึกษาและการดูแลระบบเครือข่ายด้วยตนเอง</p>
+                    <p>ออกแบบด้วยโทนสี เขียวเซจ • ครีม • ขาว</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notification for Copy Command -->
+    <div id="copy-toast" class="fixed bottom-20 right-6 z-50 hidden bg-sage-800 text-white px-4 py-3 rounded-2xl shadow-lg text-sm flex items-center gap-2.5 transition-all">
+        <i class="fa-solid fa-circle-check text-sage-300"></i>
+        <span id="copy-toast-text">คัดลอกคำสั่งเรียบร้อยแล้ว</span>
+    </div>
+
+    <!-- Floating Back to Top Button -->
+    <button id="back-to-top-btn" onclick="scrollToTop()" title="เลื่อนกลับด้านบน" class="fixed bottom-6 right-6 z-40 hidden w-12 h-12 rounded-2xl bg-sage-600 hover:bg-sage-700 text-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center cursor-pointer">
+        <i class="fa-solid fa-arrow-up text-lg"></i>
+    </button>
+
+    <!-- =====================================================================
+         JAVASCRIPT DATA & APPLICATION LOGIC
+         ===================================================================== -->
+    <script>
+        // ---------------------------------------------------------------------
+        // 1. CATEGORIES DATA (7 หมวดหมู่หลัก)
+        // ---------------------------------------------------------------------
+        const categoriesData = [
+            { id: 'all', name: 'ทั้งหมด', icon: 'fa-border-all', bg: 'bg-sage-100', border: 'border-sage-300', iconColor: 'text-sage-700', count: 12 },
+            { id: 'wifi', name: 'การเชื่อมต่อ Wi-Fi', icon: 'fa-wifi', bg: 'bg-[#E6EFE8]', border: 'border-[#C5D8C9]', iconColor: 'text-sage-700', count: 2 },
+            { id: 'slow', name: 'อินเทอร์เน็ตช้า', icon: 'fa-gauge-simple', bg: 'bg-[#F5F1E6]', border: 'border-[#E2D9C2]', iconColor: 'text-amber-700', count: 2 },
+            { id: 'no-internet', name: 'ไม่มีอินเทอร์เน็ต', icon: 'fa-globe', bg: 'bg-[#EDF2EE]', border: 'border-[#CBD8CE]', iconColor: 'text-emerald-700', count: 2 },
+            { id: 'disconnect', name: 'สัญญาณอินเทอร์เน็ตหลุดบ่อย', icon: 'fa-signal', bg: 'bg-[#F2ECE4]', border: 'border-[#DDD2C3]', iconColor: 'text-stone-700', count: 2 },
+            { id: 'cant-open', name: 'เชื่อมต่อแล้วเข้าเว็บไซต์ไม่ได้', icon: 'fa-window-close', bg: 'bg-[#E8EFEA]', border: 'border-[#C6D6CB]', iconColor: 'text-teal-700', count: 2 },
+            { id: 'dns', name: 'ปัญหา DNS', icon: 'fa-server', bg: 'bg-[#F4EFE8]', border: 'border-[#DFD5C7]', iconColor: 'text-sage-800', count: 2 }
+        ];
+
+        // ---------------------------------------------------------------------
+        // 2. UNIQUE REALISTIC ILLUSTRATIONS GENERATOR FOR EACH PROBLEM & ARTICLE
+        //    (รับประกันภาพไม่ซ้ำกัน แสดงผลได้ 100% คมชัด และตรงตามหัวข้อในโทนเขียวเซจ-ครีม-ขาว)
+        // ---------------------------------------------------------------------
+        function getUniqueIllustration(type) {
+            const illustrations = {
+                // 1. ISP Outage
+                'isp': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#E5EDE6"/>
+                    <circle cx="300" cy="160" r="120" fill="#FAF8F3"/>
+                    <!-- ISP Tower -->
+                    <polygon points="150,250 180,90 210,250" fill="none" stroke="#5E7863" stroke-width="5"/>
+                    <line x1="162" y1="180" x2="198" y2="180" stroke="#5E7863" stroke-width="4"/>
+                    <line x1="170" y1="135" x2="190" y2="135" stroke="#5E7863" stroke-width="4"/>
+                    <circle cx="180" cy="84" r="8" fill="#5E7863"/>
+                    <!-- Broken Fiber Line -->
+                    <path d="M 215 170 Q 260 170 280 155" fill="none" stroke="#5E7863" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M 320 175 Q 350 170 390 170" fill="none" stroke="#8FA893" stroke-width="6" stroke-linecap="round"/>
+                    <circle cx="300" cy="165" r="22" fill="#FFFFFF" stroke="#D97706" stroke-width="3"/>
+                    <path d="M 292 157 L 308 173 M 308 157 L 292 173" stroke="#D97706" stroke-width="3.5" stroke-linecap="round"/>
+                    <!-- Home Router with Red LOS -->
+                    <rect x="395" y="145" width="110" height="45" rx="10" fill="#FFFFFF" stroke="#5E7863" stroke-width="3"/>
+                    <rect x="420" y="105" width="6" height="40" rx="3" fill="#5E7863"/>
+                    <rect x="475" y="105" width="6" height="40" rx="3" fill="#5E7863"/>
+                    <circle cx="425" cy="168" r="5" fill="#5E7863"/>
+                    <circle cx="450" cy="168" r="5" fill="#DC2626"/>
+                    <text x="450" y="212" font-family="Prompt,sans-serif" font-size="13" font-weight="600" fill="#495E4D" text-anchor="middle">ไฟ LOS / Internet ดับ</text>
+                </svg>`,
+
+                // 2. Mobile Hotspot
+                'hotspot': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#F2EDE4"/>
+                    <circle cx="300" cy="160" r="125" fill="#FFFFFF"/>
+                    <!-- Smartphone Hotspot -->
+                    <rect x="135" y="75" width="84" height="165" rx="16" fill="#38483B"/>
+                    <rect x="143" y="88" width="68" height="136" rx="8" fill="#E5EDE6"/>
+                    <circle cx="177" cy="150" r="18" fill="#5E7863"/>
+                    <path d="M 167 148 A 14 14 0 0 1 187 148" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="177" cy="155" r="2.5" fill="#FFFFFF"/>
+                    <!-- Blocked Waves -->
+                    <path d="M 245 135 Q 265 155 245 175" fill="none" stroke="#8FA893" stroke-width="4" stroke-linecap="round"/>
+                    <circle cx="295" cy="155" r="18" fill="#FEF3C7" stroke="#D97706" stroke-width="3"/>
+                    <text x="295" y="161" font-family="Prompt,sans-serif" font-size="18" font-weight="700" fill="#D97706" text-anchor="middle">!</text>
+                    <!-- Laptop -->
+                    <rect x="340" y="95" width="145" height="100" rx="10" fill="#495E4D"/>
+                    <rect x="348" y="103" width="129" height="84" rx="5" fill="#FAF8F3"/>
+                    <polygon points="325,195 500,195 515,212 310,212" fill="#8FA893"/>
+                    <text x="412" y="150" font-family="Prompt,sans-serif" font-size="13" font-weight="600" fill="#38483B" text-anchor="middle">Hotspot 5GHz / 2.4GHz</text>
+                </svg>`,
+
+                // 3. IPv4 / IPv6
+                'ipv4': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#DCE5DD"/>
+                    <rect x="85" y="45" width="430" height="230" rx="22" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="2"/>
+                    <!-- IPv4 Box -->
+                    <rect x="125" y="85" width="150" height="75" rx="14" fill="#E5EDE6" stroke="#5E7863" stroke-width="2.5"/>
+                    <text x="200" y="118" font-family="Prompt,sans-serif" font-size="18" font-weight="700" fill="#27332A" text-anchor="middle">IPv4</text>
+                    <text x="200" y="142" font-family="monospace" font-size="13" fill="#495E4D" text-anchor="middle">192.168.1.105</text>
+                    <!-- IPv6 Box -->
+                    <rect x="325" y="85" width="150" height="75" rx="14" fill="#FAF8F3" stroke="#D97706" stroke-width="2.5"/>
+                    <text x="400" y="118" font-family="Prompt,sans-serif" font-size="18" font-weight="700" fill="#92400E" text-anchor="middle">IPv6</text>
+                    <text x="400" y="142" font-family="monospace" font-size="12" fill="#B45309" text-anchor="middle">fe80::1ff:fe23</text>
+                    <!-- Status Bar -->
+                    <rect x="125" y="185" width="350" height="52" rx="12" fill="#38483B"/>
+                    <text x="300" y="216" font-family="monospace" font-size="14" fill="#DCE5DD" text-anchor="middle">ipconfig /release &amp; /renew</text>
+                </svg>`,
+
+                // 4. Default Gateway
+                'gateway': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#FAF8F3"/>
+                    <!-- PC Left -->
+                    <rect x="85" y="95" width="130" height="90" rx="12" fill="#495E4D"/>
+                    <rect x="95" y="105" width="110" height="70" rx="6" fill="#E5EDE6"/>
+                    <rect x="135" y="185" width="30" height="22" fill="#8FA893"/>
+                    <rect x="115" y="207" width="70" height="8" rx="4" fill="#5E7863"/>
+                    <!-- Gateway Arch / Door -->
+                    <path d="M 265 215 L 265 120 A 35 35 0 0 1 335 120 L 335 215" fill="none" stroke="#5E7863" stroke-width="8" stroke-linecap="round"/>
+                    <text x="300" y="155" font-family="monospace" font-size="13" font-weight="700" fill="#27332A" text-anchor="middle">192.168.1.1</text>
+                    <text x="300" y="242" font-family="Prompt,sans-serif" font-size="13" font-weight="600" fill="#5E7863" text-anchor="middle">Default Gateway</text>
+                    <!-- Globe Right -->
+                    <circle cx="455" cy="145" r="52" fill="#DCE5DD" stroke="#5E7863" stroke-width="3"/>
+                    <ellipse cx="455" cy="145" rx="24" ry="52" fill="none" stroke="#5E7863" stroke-width="2"/>
+                    <line x1="403" y1="145" x2="507" y2="145" stroke="#5E7863" stroke-width="2"/>
+                </svg>`,
+
+                // 5. High Latency / Ping
+                'latency': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#E5EDE6"/>
+                    <rect x="75" y="42" width="450" height="236" rx="24" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="2"/>
+                    <!-- Speedometer / Latency Gauge -->
+                    <path d="M 190 205 A 110 110 0 0 1 410 205" fill="none" stroke="#DCE5DD" stroke-width="22" stroke-linecap="round"/>
+                    <path d="M 190 205 A 110 110 0 0 1 385 135" fill="none" stroke="#D97706" stroke-width="22" stroke-linecap="round"/>
+                    <line x1="300" y1="205" x2="375" y2="140" stroke="#38483B" stroke-width="6" stroke-linecap="round"/>
+                    <circle cx="300" cy="205" r="14" fill="#5E7863"/>
+                    <rect x="225" y="225" width="150" height="34" rx="10" fill="#FEF3C7"/>
+                    <text x="300" y="247" font-family="monospace" font-size="16" font-weight="700" fill="#B45309" text-anchor="middle">Ping: 285 ms</text>
+                </svg>`,
+
+                // 6. Packet Loss
+                'packet-loss': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#F2EDE4"/>
+                    <!-- Data Packets Stream -->
+                    <rect x="70" y="115" width="54" height="54" rx="12" fill="#5E7863"/>
+                    <text x="97" y="147" font-family="monospace" font-size="13" fill="#FFFFFF" text-anchor="middle">PKT 1</text>
+
+                    <rect x="155" y="115" width="54" height="54" rx="12" fill="#5E7863"/>
+                    <text x="182" y="147" font-family="monospace" font-size="13" fill="#FFFFFF" text-anchor="middle">PKT 2</text>
+
+                    <!-- Dropped Packet -->
+                    <rect x="245" y="185" width="54" height="54" rx="12" fill="#FFFFFF" stroke="#DC2626" stroke-width="3" stroke-dasharray="6 4"/>
+                    <text x="272" y="217" font-family="monospace" font-size="12" font-weight="700" fill="#DC2626" text-anchor="middle">LOST!</text>
+                    <path d="M 272 142 L 272 175" stroke="#DC2626" stroke-width="3" stroke-dasharray="4 4"/>
+
+                    <rect x="335" y="115" width="54" height="54" rx="12" fill="#5E7863"/>
+                    <text x="362" y="147" font-family="monospace" font-size="13" fill="#FFFFFF" text-anchor="middle">PKT 4</text>
+
+                    <rect x="420" y="115" width="110" height="54" rx="14" fill="#38483B"/>
+                    <text x="475" y="147" font-family="Prompt,sans-serif" font-size="13" fill="#DCE5DD" text-anchor="middle">Loss: 18%</text>
+                </svg>`,
+
+                // 7. Partial Online Services
+                'partial-service': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#DCE5DD"/>
+                    <!-- Service Cards -->
+                    <g transform="translate(95, 70)">
+                        <rect width="120" height="175" rx="18" fill="#FFFFFF" stroke="#5E7863" stroke-width="2.5"/>
+                        <circle cx="60" cy="65" r="26" fill="#E5EDE6"/>
+                        <path d="M 48 65 L 57 74 L 74 56" fill="none" stroke="#5E7863" stroke-width="4" stroke-linecap="round"/>
+                        <text x="60" y="120" font-family="Prompt,sans-serif" font-size="14" font-weight="600" fill="#27332A" text-anchor="middle">เว็บไซต์ทั่วไป</text>
+                        <text x="60" y="142" font-family="Prompt,sans-serif" font-size="12" fill="#5E7863" text-anchor="middle">ใช้งานได้ปกติ</text>
+                    </g>
+                    <g transform="translate(240, 70)">
+                        <rect width="120" height="175" rx="18" fill="#FFFFFF" stroke="#D97706" stroke-width="2.5"/>
+                        <circle cx="60" cy="65" r="26" fill="#FEF3C7"/>
+                        <path d="M 50 55 L 70 75 M 70 55 L 50 75" stroke="#D97706" stroke-width="4" stroke-linecap="round"/>
+                        <text x="60" y="120" font-family="Prompt,sans-serif" font-size="14" font-weight="600" fill="#27332A" text-anchor="middle">เกม / วิดีโอคอล</text>
+                        <text x="60" y="142" font-family="Prompt,sans-serif" font-size="12" fill="#B45309" text-anchor="middle">เชื่อมต่อไม่ได้</text>
+                    </g>
+                    <g transform="translate(385, 70)">
+                        <rect width="120" height="175" rx="18" fill="#FFFFFF" stroke="#8FA893" stroke-width="2.5"/>
+                        <circle cx="60" cy="65" r="26" fill="#FAF8F3"/>
+                        <rect x="48" y="53" width="24" height="24" rx="5" fill="none" stroke="#5E7863" stroke-width="3"/>
+                        <text x="60" y="120" font-family="Prompt,sans-serif" font-size="14" font-weight="600" fill="#27332A" text-anchor="middle">Port / DNS</text>
+                        <text x="60" y="142" font-family="Prompt,sans-serif" font-size="12" fill="#495E4D" text-anchor="middle">ตรวจสอบการตั้งค่า</text>
+                    </g>
+                </svg>`,
+
+                // 8. Wi-Fi Not Showing
+                'wifi-missing': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#E5EDE6"/>
+                    <rect x="130" y="55" width="340" height="210" rx="22" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="2"/>
+                    <circle cx="300" cy="145" r="52" fill="#FAF8F3" stroke="#8FA893" stroke-width="2.5"/>
+                    <path d="M 272 138 A 40 40 0 0 1 328 138" fill="none" stroke="#B8C9BA" stroke-width="5" stroke-linecap="round"/>
+                    <path d="M 282 150 A 26 26 0 0 1 318 150" fill="none" stroke="#B8C9BA" stroke-width="5" stroke-linecap="round"/>
+                    <line x1="265" y1="115" x2="335" y2="175" stroke="#5E7863" stroke-width="5" stroke-linecap="round"/>
+                    <text x="300" y="232" font-family="Prompt,sans-serif" font-size="15" font-weight="600" fill="#38483B" text-anchor="middle">ไม่พบรายชื่อเครือข่าย Wi-Fi</text>
+                </svg>`,
+
+                // 9. Slow Internet
+                'slow-net': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#FAF8F3"/>
+                    <rect x="110" y="65" width="380" height="190" rx="22" fill="#FFFFFF" stroke="#B8C9BA" stroke-width="2"/>
+                    <text x="300" y="118" font-family="Prompt,sans-serif" font-size="16" font-weight="600" fill="#38483B" text-anchor="middle">กำลังโหลดหน้าเว็บช้ากว่าปกติ...</text>
+                    <rect x="150" y="145" width="300" height="24" rx="12" fill="#E5EDE6"/>
+                    <rect x="150" y="145" width="85" height="24" rx="12" fill="#8FA893"/>
+                    <text x="300" y="205" font-family="Prompt,sans-serif" font-size="13" fill="#6E8C73" text-anchor="middle">ตรวจสอบแบนด์วิดท์และคลื่นความถี่ 5GHz</text>
+                </svg>`,
+
+                // 10. Frequent Disconnect
+                'wifi-drop': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#F2EDE4"/>
+                    <rect x="100" y="60" width="400" height="200" rx="22" fill="#FFFFFF" stroke="#C5D8C9" stroke-width="2"/>
+                    <path d="M 140 160 L 210 160 L 230 115 L 255 205 L 280 160 L 330 160" fill="none" stroke="#5E7863" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M 355 160 L 460 160" fill="none" stroke="#B8C9BA" stroke-width="5" stroke-dasharray="10 10" stroke-linecap="round"/>
+                    <text x="300" y="232" font-family="Prompt,sans-serif" font-size="14" font-weight="600" fill="#495E4D" text-anchor="middle">สัญญาณไม่เสถียร หลุดและเชื่อมต่อใหม่บ่อย</text>
+                </svg>`,
+
+                // 11. DNS Error
+                'dns-error': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#DCE5DD"/>
+                    <rect x="95" y="45" width="410" height="230" rx="18" fill="#FFFFFF" stroke="#8FA893" stroke-width="2"/>
+                    <rect x="95" y="45" width="410" height="36" rx="18" fill="#E5EDE6"/>
+                    <circle cx="122" cy="63" r="6" fill="#8FA893"/>
+                    <circle cx="142" cy="63" r="6" fill="#B8C9BA"/>
+                    <rect x="165" y="53" width="290" height="20" rx="8" fill="#FFFFFF"/>
+                    <text x="180" y="67" font-family="monospace" font-size="11" fill="#495E4D">https://www.example.com</text>
+                    <text x="300" y="145" font-family="monospace" font-size="16" font-weight="700" fill="#38483B" text-anchor="middle">DNS_PROBE_FINISHED_NXDOMAIN</text>
+                    <text x="300" y="180" font-family="Prompt,sans-serif" font-size="14" fill="#5E7863" text-anchor="middle">ไม่พบที่อยู่ IP ของเว็บไซต์ (DNS 8.8.8.8 / 1.1.1.1)</text>
+                </svg>`,
+
+                // 12. No Internet Secured
+                'no-net-secured': `
+                <svg viewBox="0 0 600 320" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="320" fill="#E5EDE6"/>
+                    <rect x="115" y="65" width="370" height="190" rx="22" fill="#FFFFFF" stroke="#8FA893" stroke-width="2.5"/>
+                    <circle cx="215" cy="160" r="42" fill="#FAF8F3" stroke="#5E7863" stroke-width="3"/>
+                    <circle cx="215" cy="160" r="22" fill="none" stroke="#5E7863" stroke-width="2"/>
+                    <line x1="185" y1="130" x2="245" y2="190" stroke="#D97706" stroke-width="4"/>
+                    <text x="365" y="150" font-family="Prompt,sans-serif" font-size="18" font-weight="700" fill="#27332A" text-anchor="middle">No Internet, Secured</text>
+                    <text x="365" y="178" font-family="Prompt,sans-serif" font-size="13" fill="#5E7863" text-anchor="middle">เชื่อมต่อเราเตอร์ได้ แต่ออกเน็ตไม่ได้</text>
+                </svg>`,
+
+                // Article 1
+                'art-router': `
+                <svg viewBox="0 0 600 300" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="300" fill="#E5EDE6"/>
+                    <rect x="130" y="135" width="340" height="80" rx="18" fill="#FFFFFF" stroke="#5E7863" stroke-width="3"/>
+                    <rect x="180" y="65" width="10" height="70" rx="5" fill="#5E7863"/>
+                    <rect x="295" y="55" width="10" height="80" rx="5" fill="#5E7863"/>
+                    <rect x="410" y="65" width="10" height="70" rx="5" fill="#5E7863"/>
+                    <circle cx="195" cy="175" r="8" fill="#10B981"/>
+                    <circle cx="245" cy="175" r="8" fill="#10B981"/>
+                    <circle cx="295" cy="175" r="8" fill="#10B981"/>
+                    <circle cx="345" cy="175" r="8" fill="#F59E0B"/>
+                    <circle cx="395" cy="175" r="8" fill="#10B981"/>
+                    <text x="300" y="252" font-family="Prompt,sans-serif" font-size="15" font-weight="600" fill="#27332A" text-anchor="middle">ความหมายของไฟสถานะ POWER • PON • LOS • WLAN</text>
+                </svg>`,
+
+                // Article 2
+                'art-bands': `
+                <svg viewBox="0 0 600 300" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="300" fill="#FAF8F3"/>
+                    <rect x="75" y="55" width="205" height="190" rx="20" fill="#E5EDE6" stroke="#5E7863" stroke-width="2"/>
+                    <text x="177" y="110" font-family="Prompt,sans-serif" font-size="24" font-weight="700" fill="#27332A" text-anchor="middle">2.4 GHz</text>
+                    <text x="177" y="145" font-family="Prompt,sans-serif" font-size="14" fill="#495E4D" text-anchor="middle">ส่งได้ไกล ทะลุกำแพงดี</text>
+                    <text x="177" y="172" font-family="Prompt,sans-serif" font-size="13" fill="#5E7863" text-anchor="middle">เหมาะกับใช้งานทั่วไป</text>
+
+                    <rect x="320" y="55" width="205" height="190" rx="20" fill="#5E7863"/>
+                    <text x="422" y="110" font-family="Prompt,sans-serif" font-size="24" font-weight="700" fill="#FFFFFF" text-anchor="middle">5 GHz</text>
+                    <text x="422" y="145" font-family="Prompt,sans-serif" font-size="14" fill="#FAF8F3" text-anchor="middle">ความเร็วสูง สัญญาณกวนน้อย</text>
+                    <text x="422" y="172" font-family="Prompt,sans-serif" font-size="13" fill="#DCE5DD" text-anchor="middle">เหมาะกับเล่นเกม / ดูหนัง 4K</text>
+                </svg>`,
+
+                // Article 3
+                'art-dns': `
+                <svg viewBox="0 0 600 300" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="300" fill="#DCE5DD"/>
+                    <rect x="90" y="55" width="420" height="190" rx="22" fill="#FFFFFF" stroke="#8FA893" stroke-width="2"/>
+                    <text x="300" y="105" font-family="Prompt,sans-serif" font-size="18" font-weight="700" fill="#27332A" text-anchor="middle">สมุดโทรศัพท์ของอินเทอร์เน็ต (DNS)</text>
+                    <rect x="130" y="130" width="140" height="44" rx="10" fill="#E5EDE6"/>
+                    <text x="200" y="157" font-family="monospace" font-size="14" fill="#27332A" text-anchor="middle">google.com</text>
+                    <path d="M 280 152 L 320 152" stroke="#5E7863" stroke-width="4" stroke-linecap="round"/>
+                    <rect x="330" y="130" width="140" height="44" rx="10" fill="#5E7863"/>
+                    <text x="400" y="157" font-family="monospace" font-size="14" fill="#FFFFFF" text-anchor="middle">142.250.199.14</text>
+                    <text x="300" y="215" font-family="Prompt,sans-serif" font-size="13" fill="#5E7863" text-anchor="middle">Public DNS ยอดนิยม: 8.8.8.8 (Google) และ 1.1.1.1 (Cloudflare)</text>
+                </svg>`
+            };
+            return illustrations[type] || illustrations['no-net-secured'];
+        }
+
+        // ---------------------------------------------------------------------
+        // 3. COMPREHENSIVE DATABASE OF 12 INTERNET PROBLEMS
+        //    (ครบทั้ง 7 ปัญหาหลักที่กำหนด + 5 ปัญหาพื้นฐานครอบคลุมทุกหมวดหมู่
+        //     เรียงวิธีแก้ไขตามหลัก 8 ขั้นตอนจากง่ายไปซับซ้อน + ข้อควรระวัง)
+        // ---------------------------------------------------------------------
+        const problemsDatabase = [
+            {
+                id: 'isp-outage',
+                category: 'no-internet',
+                categoryName: 'ไม่มีอินเทอร์เน็ต',
+                title: 'การเชื่อมต่ออินเทอร์เน็ตถูกตัดจากผู้ให้บริการอินเทอร์เน็ต (ISP)',
+                shortDesc: 'คอมพิวเตอร์เชื่อมต่อ Wi-Fi หรือสาย LAN ได้ แต่ไม่สามารถออกอินเทอร์เน็ตได้เลย และไฟสถานะบนเราเตอร์ผิดปกติ',
+                illustration: 'isp',
+                symptoms: [
+                    'ทุกอุปกรณ์ในบ้านหรือสำนักงานไม่สามารถเข้าใช้งานอินเทอร์เน็ตได้พร้อมกัน',
+                    'บนเราเตอร์หรือ ONU มีไฟสีแดงกระพริบที่ช่อง LOS หรือไฟ Internet ดับลง',
+                    'หน้าต่างเบราว์เซอร์แจ้งว่า "ไม่มีการเชื่อมต่ออินเทอร์เน็ต" แม้เชื่อมต่อ Wi-Fi ได้เต็มขีด'
+                ],
+                causes: [
+                    'สายใยแก้วนำแสง (Fiber Optic) ภายนอกบ้านขาด ชำรุด หรือโค้งงอหัก',
+                    'ชุมสายของผู้ให้บริการอินเทอร์เน็ต (ISP) ในพื้นที่กำลังปิดปรับปรุงหรือเกิดเหตุขัดข้องชั่วคราว',
+                    'มียอดค้างชำระค่าบริการเกินกำหนด ทำให้ระบบระงับสัญญาณอัตโนมัติ'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบการเชื่อมต่อเบื้องต้นกับอุปกรณ์อื่น',
+                        detail: 'ลองใช้สมาร์ทโฟนหรือแท็บเล็ตเชื่อมต่อ Wi-Fi เดียวกัน (โดยปิดอินเทอร์เน็ตมือถือ 4G/5G ก่อน) หากเข้าเว็บไม่ได้ทุกเครื่อง แสดงว่าปัญหาเกิดจากต้นทางสัญญาณ ไม่ใช่ที่คอมพิวเตอร์เครื่องเดียว'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบอุปกรณ์เครือข่ายและไฟแสดงสถานะบนเราเตอร์',
+                        detail: 'สังเกตไฟบนกล่องเราเตอร์หลัก: ไฟ POWER และ PON ควรติดสีเขียวค้าง หากพบไฟสีแดงกระพริบที่คำว่า LOS แสดงว่าสัญญาณสายไฟเบอร์ขาดหาย และตรวจดูว่าสายไฟเบอร์สีเหลือง/ดำด้านหลังไม่หลุดหรือหักงอ'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'ตรวจสอบการเชื่อมต่อใหม่บนคอมพิวเตอร์',
+                        detail: 'ลองปิดและเปิด Wi-Fi บนคอมพิวเตอร์ หรือถอดสาย LAN แล้วเสียบกลับเข้าไปใหม่ให้แน่นจนได้ยินเสียงคลิก'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตอุปกรณ์เราเตอร์อย่างปลอดภัย',
+                        detail: 'กดปุ่มปิด (Power) หรือถอดปลั๊กไฟของเราเตอร์และกล่องแปลงสัญญาณ (ONU) ทิ้งไว้ประมาณ 30-60 วินาที แล้วเสียบปลั๊กเปิดใหม่ รอประมาณ 2-3 นาทีให้ระบบจับสัญญาณ'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยเครือข่าย (Windows Network Troubleshooter)',
+                        detail: 'คลิกขวาที่ไอคอนเครือข่ายมุมขวาล่างของจอ เลือก "Diagnose network problems" (แก้ไขปัญหาเครือข่าย) เพื่อยืนยันว่าคอมพิวเตอร์ติดต่อเราเตอร์ได้ปกติ แต่เราเตอร์ไม่สามารถติดต่อเซิร์ฟเวอร์ภายนอกได้'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'ตรวจสอบการตั้งค่าเครือข่ายและสถานะบัญชีบริการ',
+                        detail: 'ตรวจสอบผ่านแอปพลิเคชันของผู้ให้บริการ (เช่น True iService, myAIS, 3BB Member, NT eService) บนมือถือด้วยเน็ตมือถือ เพื่อเช็กว่าพื้นที่ของคุณมีประกาศซ่อมบำรุงหรือมียอดค้างชำระหรือไม่'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งตรวจสอบเครือข่าย (Command Prompt)',
+                        detail: 'เปิด Command Prompt (พิมพ์ cmd ในช่องค้นหา Windows) แล้วพิมพ์คำสั่งด้านล่างเพื่อทดสอบว่าข้อมูลวิ่งออกไปนอกเราเตอร์ได้หรือไม่',
+                        command: 'ping 8.8.8.8',
+                        cmdExplain: 'หน้าที่: ทดสอบส่งข้อมูลไปยังเซิร์ฟเวอร์ Google ภายนอก | ผลลัพธ์: หากขึ้น "Request timed out" หรือ "Destination host unreachable" แสดงว่าออกอินเทอร์เน็ตไม่ได้จริง'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'ดำเนินการตรวจสอบเพิ่มเติมและติดต่อผู้ให้บริการ (ISP)',
+                        detail: 'หากไฟ LOS ยังคงกระพริบสีแดงหรือใช้งานไม่ได้เกิน 15 นาทีหลังรีสตาร์ต ให้จดรหัสลูกค้า (Circuit ID) และโทรแจ้งศูนย์บริการลูกค้าของผู้ให้บริการอินเทอร์เน็ตเพื่อให้เจ้าหน้าที่ตรวจสอบคู่สายจากส่วนกลางหรือส่งช่างเข้าแก้ไข'
+                    }
+                ],
+                tips: 'หากต้องใช้งานอินเทอร์เน็ตเร่งด่วนระหว่างรอช่างซ่อม สามารถเปิด Personal Hotspot จากโทรศัพท์มือถือเพื่อเชื่อมต่อกับคอมพิวเตอร์ใช้งานชั่วคราวได้',
+                caution: 'ห้ามกดปุ่ม Reset (รูเล็ก ๆ ด้านหลังเราเตอร์) เพื่อคืนค่าโรงงานโดยเด็ดขาด เพราะจะทำให้ค่าตั้งต้น PPPoE ของผู้ให้บริการสูญหาย และไม่สามารถแก้ปัญหาสายไฟเบอร์ภายนอกขาดได้'
+            },
+
+            {
+                id: 'mobile-hotspot',
+                category: 'wifi',
+                categoryName: 'การเชื่อมต่อ Wi-Fi',
+                title: 'ไม่สามารถเชื่อมต่ออินเทอร์เน็ตผ่าน Mobile Hotspot ได้',
+                shortDesc: 'คอมพิวเตอร์มองไม่เห็นชื่อ Hotspot จากมือถือ เชื่อมต่อแล้วเด้งหลุด หรือเชื่อมต่อได้แต่เล่นเน็ตไม่ได้',
+                illustration: 'hotspot',
+                symptoms: [
+                    'เปิด Personal Hotspot บนสมาร์ทโฟนแล้ว แต่รายชื่อไม่ขึ้นบนหน้าจอ Wi-Fi ของคอมพิวเตอร์',
+                    'กดเชื่อมต่อและใส่รหัสผ่านถูกต้องแล้ว แต่ขึ้นข้อความ "Can\'t connect to this network"',
+                    'เชื่อมต่อ Hotspot สำเร็จ แต่หน้าเว็บไม่โหลดหรือขึ้น No Internet'
+                ],
+                causes: [
+                    'มือถือปล่อยสัญญาณย่านความถี่ 5 GHz (หรือ Wi-Fi 6) ซึ่งการ์ด Wi-Fi ของคอมพิวเตอร์รุ่นเก่าไม่รองรับ',
+                    'โหมดประหยัดพลังงาน (Low Power Mode / Battery Saver) บนมือถือตัดการทำงานของ Hotspot อัตโนมัติ',
+                    'ค่า IP เก่าหรือโปรไฟล์เครือข่ายบนคอมพิวเตอร์เกิดความขัดแย้งกัน'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบการเชื่อมต่อเบื้องต้น',
+                        detail: 'ตรวจสอบว่าโทรศัพท์มือถือเครื่องที่ปล่อย Hotspot สามารถเปิดเข้าเว็บไซต์หรือดูวิดีโอด้วยอินเทอร์เน็ตมือถือ (4G/5G) ได้ตามปกติ และไม่ได้เปิดโหมดเครื่องบิน (Airplane Mode) ค้างไว้'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบการตั้งค่าย่านความถี่บนมือถือ',
+                        detail: 'เข้าไปที่เมนูตั้งค่า Hotspot บนมือถือ: สำหรับ iPhone ให้เปิดหัวข้อ "Maximize Compatibility" (เพิ่มความเข้ากันได้สูงสุด) ส่วน Android ให้เปลี่ยน AP Band จาก 5 GHz เป็น 2.4 GHz เพื่อให้คอมพิวเตอร์ทุกรุ่นมองเห็นสัญญาณ'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'ปิดและเปิดการเชื่อมต่อใหม่ทั้งสองฝั่ง',
+                        detail: 'ปิด Hotspot บนมือถือและปิด Wi-Fi บนคอมพิวเตอร์ประมาณ 10 วินาที จากนั้นเปิด Hotspot บนมือถือค้างไว้ที่หน้าการตั้งค่า แล้วกดค้นหา Wi-Fi บนคอมพิวเตอร์ใหม่'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตอุปกรณ์',
+                        detail: 'หากยังไม่พบสัญญาณ ให้ลองรีสตาร์ตสมาร์ทโฟนและคอมพิวเตอร์หนึ่งครั้งเพื่อเคลียร์หน่วยความจำชั่วคราวของชิปไร้สาย'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยเครือข่าย (Windows Network Troubleshooter)',
+                        detail: 'ไปที่ Settings > Network & Internet > Troubleshoot (หรือคลิกขวาที่ไอคอน Wi-Fi มุมขวาล่าง) เพื่อให้ Windows รีเซ็ตอะแดปเตอร์ไร้สายอัตโนมัติ'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'ตรวจสอบโปรไฟล์ Wi-Fi และตั้งค่า IP อัตโนมัติ',
+                        detail: 'คลิกขวาที่ชื่อ Hotspot ในรายการ Wi-Fi ของคอมพิวเตอร์ เลือก "Forget" (ลืมเครือข่าย) แล้วเชื่อมต่อใหม่พร้อมกรอกรหัสผ่านอีกครั้ง และตรวจสอบให้แน่ใจว่าตั้งค่า IPv4 เป็น Obtain an IP address automatically'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งตรวจสอบเครือข่าย (Command Prompt)',
+                        detail: 'เปิด Command Prompt เพื่อขอรับหมายเลข IP ใหม่จากมือถือที่ปล่อย Hotspot',
+                        command: 'ipconfig /renew',
+                        cmdExplain: 'หน้าที่: สั่งให้คอมพิวเตอร์ขอรับค่า IP Address ใหม่จากอุปกรณ์แม่ข่าย (Hotspot) | ผลลัพธ์: จะแสดงเลข IPv4 Address และ Default Gateway ชุดใหม่ขึ้นมา'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'แนวทางตรวจสอบเพิ่มเติม (เชื่อมต่อผ่านสาย USB)',
+                        detail: 'หากเชื่อมต่อแบบไร้สายไม่ได้จริง สามารถใช้สายชาร์จ USB เชื่อมต่อมือถือเข้ากับคอมพิวเตอร์ แล้วเปิดฟีเจอร์ "USB Tethering" (ปล่อยอินเทอร์เน็ตผ่านสาย USB) ซึ่งเสถียรและไม่รบกวนสัญญาณไร้สาย'
+                    }
+                ],
+                tips: 'ตั้งชื่อ Hotspot (SSID) เป็นภาษาอังกฤษและตัวเลขล้วน หลีกเลี่ยงอักขระพิเศษหรืออีโมจิ เพราะการ์ด Wi-Fi บางรุ่นบน Windows อาจไม่รองรับ',
+                caution: 'การเปิด Hotspot ต่อเนื่องเป็นเวลานานทำให้แบตเตอรี่มือถือร้อนและลดลงเร็ว ควรปิดโหมดประหยัดพลังงานชั่วคราวและเสียบสายชาร์จขณะใช้งาน'
+            },
+
+            {
+                id: 'ipv4-ipv6',
+                category: 'cant-open',
+                categoryName: 'เชื่อมต่อแล้วเข้าเว็บไซต์ไม่ได้',
+                title: 'การเชื่อมต่อเครือข่ายผ่าน IPv4 หรือ IPv6 ทำงานผิดปกติ',
+                shortDesc: 'เข้าบางเว็บไซต์ได้ (เช่น Google/YouTube) แต่เข้าเว็บทั่วไปในประเทศไม่ได้ หรือขึ้นสถานะ IPv4/IPv6 No Network Access',
+                illustration: 'ipv4',
+                symptoms: [
+                    'เปิดดู YouTube หรือค้นหาบน Google ได้ แต่เปิดเว็บไซต์อื่น ๆ ไม่ได้เลย',
+                    'ในหน้าสถานะการเชื่อมต่อ (Network Status) แสดงว่า IPv6 Connected แต่ IPv4 No Internet access (หรือสลับกัน)',
+                    'ระบบแจ้งเตือนข้อผิดพลาดเกี่ยวกับ IP Configuration หรือเกิด IP ชนกันในเครือข่าย'
+                ],
+                causes: [
+                    'การแจกหมายเลข IP (DHCP) จากเราเตอร์เกิดข้อผิดพลาด ทำให้คอมพิวเตอร์ไม่ได้รับ IPv4 หรือ IPv6 ที่ถูกต้อง',
+                    'มีอุปกรณ์อื่นในเครือข่ายตั้งค่า Static IP ซ้ำกับคอมพิวเตอร์ของคุณ (IP Conflict)',
+                    'เราเตอร์หรือผู้ให้บริการอินเทอร์เน็ตมีปัญหากับการส่งผ่านข้อมูลโปรโตคอล IPv6 ในบางเส้นทาง'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบการเชื่อมต่อเบื้องต้น',
+                        detail: 'ทดสอบเปิดเว็บไซต์ทั้งแบบที่รองรับ IPv6 (เช่น google.com) และเว็บไซต์ทั่วไป เพื่อดูว่าเข้าไม่ได้เฉพาะบางกลุ่มหรือไม่ และลองเช็กกับเครื่องอื่นในวง Wi-Fi เดียวกัน'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบอุปกรณ์เครือข่าย',
+                        detail: 'ตรวจสอบว่าคอมพิวเตอร์ไม่ได้เสียบสาย LAN พร้อมกับเปิด Wi-Fi ในวงเครือข่ายที่ขัดแย้งกัน และดูไฟสถานะบนเราเตอร์ว่าทำงานปกติ'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'ปิด-เปิดการเชื่อมต่อเครือข่ายใหม่ (Disable / Enable Adapter)',
+                        detail: 'กดปุ่ม Windows + R พิมพ์ ncpa.cpl แล้วกด Enter คลิกขวาที่ตัวเชื่อมต่อ (Wi-Fi หรือ Ethernet) เลือก Disable รอ 5 วินาที แล้วคลิกขวาเลือก Enable'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตคอมพิวเตอร์และเราเตอร์',
+                        detail: 'รีสตาร์ตเราเตอร์เพื่อให้ระบบ DHCP Server แจกหมายเลข IP ชุดใหม่ให้กับทุกอุปกรณ์อย่างสะอาด'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยเครือข่าย (Windows Network Troubleshooter)',
+                        detail: 'รัน Windows Network Troubleshooter ระบบจะตรวจสอบค่า DHCP และแก้ไขปัญหา IP ซ้ำซ้อนให้อัตโนมัติ'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'ตรวจสอบการตั้งค่า IPv4 และ IPv6 ใน Properties',
+                        detail: 'ในหน้าต่าง ncpa.cpl คลิกขวาที่ตัวเชื่อมต่อ > Properties > ดับเบิลคลิกที่ "Internet Protocol Version 4 (TCP/IPv4)" ตรวจสอบให้เลือก "Obtain an IP address automatically" (รับ IP อัตโนมัติ) เว้นแต่ผู้ดูแลระบบกำหนดค่าคงที่ไว้ให้'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งคืนค่าและขอรับ IP Address ใหม่',
+                        detail: 'เปิด Command Prompt แบบ Administrator แล้วรันคำสั่งปลดปล่อย IP เดิมและขอรับ IP ใหม่',
+                        command: 'ipconfig /release && ipconfig /renew',
+                        cmdExplain: 'หน้าที่: คืนค่า IP เก่าที่อาจขัดข้อง และขอรับหมายเลข IPv4 ใหม่จากเราเตอร์ทันที | ผลลัพธ์: ต้องปรากฏเลข IPv4 Address เช่น 192.168.1.xxx (ไม่ใช่ 169.254.x.x)'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'แนวทางตรวจสอบเพิ่มเติมและติดต่อผู้ดูแลระบบ',
+                        detail: 'หากพบว่าได้รับเลข IP เป็น 169.254.x.x (APIPA) แสดงว่าคอมพิวเตอร์ติดต่อ DHCP Server บนเราเตอร์ไม่ได้ ให้ติดต่อผู้ดูแลระบบเครือข่ายหรือผู้ให้บริการอินเทอร์เน็ตตรวจสอบการตั้งค่าของเราเตอร์'
+                    }
+                ],
+                tips: 'หมายเลข IP ที่ขึ้นต้นด้วย 169.254.x.x เป็นสัญญาณสำคัญที่บอกว่าคอมพิวเตอร์ไม่สามารถรับแจก IP จากเราเตอร์ได้สำเร็จ',
+                caution: 'อย่าตั้งค่า Static IP ด้วยตนเองโดยไม่ทราบช่วง IP ของเราเตอร์ เพราะอาจทำให้เลข IP ไปชนกับอุปกรณ์อื่นในบ้านหรือสำนักงาน'
+            },
+
+            {
+                id: 'default-gateway',
+                category: 'no-internet',
+                categoryName: 'ไม่มีอินเทอร์เน็ต',
+                title: 'การตั้งค่าเกตเวย์เริ่มต้น (Default Gateway) ไม่ถูกต้อง',
+                shortDesc: 'คอมพิวเตอร์เชื่อมต่อกับสาย LAN หรือ Wi-Fi ได้ แต่ไม่พบช่องทางออกสู่อินเทอร์เน็ต (Default Gateway is not available)',
+                illustration: 'gateway',
+                symptoms: [
+                    'เครื่องมือวินิจฉัยเครือข่ายขึ้นข้อความ "The default gateway is not available"',
+                    'เชื่อมต่อเครือข่ายภายในได้ แต่เปิดเว็บไซต์ใด ๆ ไม่ได้เลย',
+                    'ตรวจสอบด้วยคำสั่ง ipconfig แล้วช่อง Default Gateway ว่างเปล่าหรือเป็นตัวเลขผิดปกติ'
+                ],
+                causes: [
+                    'เคยมีการตั้งค่า IP แบบกำหนดเอง (Manual / Static IP) ค้างไว้จากเครือข่ายอื่น ทำให้เลข Gateway ไม่ตรงกับเราเตอร์ปัจจุบัน',
+                    'ไดรเวอร์การ์ดเครือข่าย (Network Adapter Driver) ทำงานค้างหรือเข้าโหมดประหยัดพลังงาน',
+                    'ซอฟต์แวร์ VPN หรือ Virtual Machine สร้าง Virtual Gateway ทับซ้อนกับเส้นทางหลัก'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบการเชื่อมต่อเบื้องต้น',
+                        detail: 'ตรวจสอบว่าอุปกรณ์อื่นในเครือข่ายเดียวกันใช้งานอินเทอร์เน็ตได้ปกติหรือไม่ เพื่อยืนยันว่าเราเตอร์ตัวหลักยังทำงานและแจกสัญญาณได้'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบอุปกรณ์เครือข่ายและสายสัญญาณ',
+                        detail: 'หากใช้สาย LAN ให้ตรวจสอบว่าเสียบเข้าพอร์ต LAN (สีเหลือง/ดำ) ของเราเตอร์ถูกต้อง ไม่ได้เสียบผิดช่องไปที่พอร์ต WAN'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'ตัดการเชื่อมต่อและเชื่อมต่อใหม่',
+                        detail: 'กด Disconnect จาก Wi-Fi ปัจจุบัน หรือถอดสาย LAN ออก 10 วินาที แล้วเชื่อมต่อใหม่อีกครั้ง'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตอุปกรณ์',
+                        detail: 'ทำการ Restart เครื่องคอมพิวเตอร์ เพื่อให้ระบบปฏิบัติการโหลดตารางเส้นทางเครือข่าย (Routing Table) ขึ้นมาใหม่'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยเครือข่าย (Windows Network Troubleshooter)',
+                        detail: 'คลิกขวาที่ไอคอนเครือข่าย เลือก Troubleshoot problems เพื่อสั่งให้ Windows รีเซ็ตการ์ดแลน/ไวไฟและดึงค่า Default Gateway ใหม่'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'ตรวจสอบการตั้งค่า Default Gateway ใน IPv4',
+                        detail: 'เข้าไปที่ Control Panel > Network and Sharing Center > Change adapter settings > คลิกขวาตัวเชื่อมต่อ > Properties > Internet Protocol Version 4 (TCP/IPv4) ตรวจสอบให้ตั้งเป็น "Obtain an IP address automatically" (โดยปกติ Gateway ของเราเตอร์บ้านมักเป็น 192.168.1.1 หรือ 192.168.0.1)'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งตรวจสอบค่า Gateway และทดสอบ Ping',
+                        detail: 'เปิด Command Prompt แล้วพิมพ์คำสั่งเพื่อดูหมายเลข Default Gateway ปัจจุบัน',
+                        command: 'ipconfig',
+                        cmdExplain: 'หน้าที่: แสดงค่า IPv4 Address, Subnet Mask และ Default Gateway | ผลลัพธ์: ช่อง Default Gateway ต้องมีตัวเลข เช่น 192.168.1.1 และสามารถใช้คำสั่ง ping 192.168.1.1 แล้วได้รับการตอบกลับ (Reply from...)'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'ดำเนินการตรวจสอบเพิ่มเติม',
+                        detail: 'หากช่อง Default Gateway ยังคงว่างเปล่าแม้ตั้งเป็น Auto แล้ว อาจเกิดจากไดรเวอร์การ์ดเครือข่ายเสียหาย ให้ตรวจสอบอัปเดตไดรเวอร์ใน Device Manager หรือติดต่อผู้ดูแลระบบเครือข่าย'
+                    }
+                ],
+                tips: 'หากต้องเปลี่ยนสถานที่ใช้งานโน้ตบุ๊กบ่อย ๆ (เช่น บ้านและที่ทำงาน) ควรตั้งค่า IP เป็นอัตโนมัติ (DHCP) เสมอ เพื่อป้องกันเลข Default Gateway ค้างจากที่เก่า',
+                caution: 'ก่อนเปลี่ยนค่า IP หรือ Gateway จากแบบ Manual เป็น Auto ควรจดบันทึกตัวเลขเดิมเก็บไว้ก่อน เผื่อเป็นเครือข่ายองค์กรที่บังคับใช้เลข IP เฉพาะ'
+            },
+
+            {
+                id: 'high-latency',
+                category: 'slow',
+                categoryName: 'อินเทอร์เน็ตช้า',
+                title: 'การเชื่อมต่ออินเทอร์เน็ตมีค่าความหน่วงสูง (High Latency)',
+                shortDesc: 'กดเปิดเว็บแล้วรอหมุนนาน เล่นเกมออนไลน์แล้วตัวละครกระตุก (แลค) หรือประชุมวิดีโอคอลแล้วเสียงดีเลย์',
+                illustration: 'latency',
+                symptoms: [
+                    'ค่า Ping สูงผิดปกติ (เช่น มากกว่า 100-300 ms จากปกติ 5-30 ms)',
+                    'คลิกลิงก์แล้วหน้าเว็บชะงักไปครู่หนึ่งก่อนจะเริ่มโหลดข้อมูล',
+                    'เสียงและภาพในการประชุมออนไลน์ (Zoom / Teams / Meet) ดีเลย์ไม่ตรงกัน'
+                ],
+                causes: [
+                    'มีการอัปโหลดหรือดาวน์โหลดไฟล์ขนาดใหญ่พร้อมกันในเครือข่าย (เช่น สำรองข้อมูลขึ้น Cloud, อัปเดต Windows/เกม) จนเต็มแบนด์วิดท์ (Bufferbloat)',
+                    'ใช้งาน Wi-Fi ย่านความถี่ 2.4 GHz ในพื้นที่ที่มีสัญญาณรบกวนหนาแน่นหรืออยู่ไกลจากเราเตอร์',
+                    'เปิดใช้งาน VPN ที่เชื่อมต่อผ่านเซิร์ฟเวอร์ในต่างประเทศ ทำให้ข้อมูลต้องเดินทางอ้อมไกล'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบการเชื่อมต่อและการใช้งานในเครือข่ายเบื้องต้น',
+                        detail: 'ตรวจสอบว่ามีโปรแกรมบนคอมพิวเตอร์หรืออุปกรณ์อื่นในบ้านกำลังดาวน์โหลดไฟล์ อัปเดตระบบ หรือสตรีมวิดีโอความละเอียดสูงพร้อมกันหลายเครื่องหรือไม่'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบอุปกรณ์เครือข่ายและระยะห่าง',
+                        detail: 'ตรวจสอบว่าคอมพิวเตอร์อยู่ห่างจากเราเตอร์มากเกินไปหรือมีกำแพงหนากั้นหรือไม่ หากเป็นไปได้ให้เปลี่ยนมาใช้สาย LAN (Cat5e/Cat6) จะช่วยลดค่าความหน่วงได้มากที่สุด'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'เปลี่ยนย่านความถี่ Wi-Fi เป็น 5 GHz',
+                        detail: 'ตัดการเชื่อมต่อจาก Wi-Fi ชื่อเดิม (2.4 GHz) แล้วเลือกเชื่อมต่อกับชื่อ Wi-Fi ที่มีคำว่า _5G (5 GHz) ซึ่งมีช่องสัญญาณกว้างและค่าความหน่วงต่ำกว่า'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตเราเตอร์เพื่อเคลียร์ทราฟฟิกสะสม',
+                        detail: 'ปิด-เปิดเราเตอร์ใหม่ 1 ครั้ง เพื่อเคลียร์ตารางการส่งข้อมูล (NAT Session) ที่อาจค้างสะสมจากการเปิดใช้งานต่อเนื่องหลายวัน'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยและตรวจสอบโปรแกรมเบื้องหลัง',
+                        detail: 'เปิด Task Manager (กด Ctrl + Shift + Esc) ดูที่แท็บ Performance > Wi-Fi/Ethernet เพื่อตรวจสอบว่ามีโปรแกรมใดแอบใช้แบนด์วิดท์อยู่เบื้องหลังหรือไม่'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'ตรวจสอบการตั้งค่า Proxy และ VPN',
+                        detail: 'ตรวจสอบว่าไม่ได้เปิดโปรแกรม VPN หรือ Proxy ค้างไว้โดยไม่จำเป็น หากเปิดอยู่ให้ทดลองปิดชั่วคราวแล้วทดสอบความเร็วอีกครั้ง'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งตรวจสอบค่าความหน่วงและเส้นทาง (Ping & Tracert)',
+                        detail: 'เปิด Command Prompt เพื่อวัดค่า Latency จริงไปยังเราเตอร์และเซิร์ฟเวอร์ภายนอก',
+                        command: 'ping 8.8.8.8 -n 10',
+                        cmdExplain: 'หน้าที่: ส่งข้อมูลทดสอบ 10 ครั้งเพื่อดูค่าเฉลี่ยความหน่วง (Average time) | ผลลัพธ์: ค่า time ควรต่ำและสม่ำเสมอ (เช่น 10ms - 35ms) หากพุ่งสูงเกิน 150ms แสดงว่ามีความหน่วงสูง'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'แนวทางตรวจสอบเพิ่มเติมและติดต่อ ISP',
+                        detail: 'ใช้คำสั่ง tracert 8.8.8.8 เพื่อดูว่าค่าความหน่วงเริ่มสูงขึ้นที่จุดใด (Hop 1 คือเราเตอร์ในบ้าน, Hop ถัดไปคือโครงข่ายของผู้ให้บริการ) หากสูงตั้งแต่จุดของผู้ให้บริการ ให้ส่งผลทดสอบให้ ISP ช่วยรีเซ็ตสัญญาณจากชุมสาย'
+                    }
+                ],
+                tips: 'สำหรับการเล่นเกมออนไลน์หรือประชุมสำคัญ การเชื่อมต่อผ่านสาย LAN โดยตรงจะให้ค่า Latency ที่นิ่งและต่ำกว่า Wi-Fi เสมอ',
+                caution: 'หลีกเลี่ยงการตั้งค่า QoS (Quality of Service) ในเราเตอร์แบบสุ่มหากไม่เข้าใจการแบ่งแบนด์วิดท์ เพราะอาจทำให้ความเร็วอินเทอร์เน็ตโดยรวมลดลง'
+            },
+
+            {
+                id: 'packet-loss',
+                category: 'disconnect',
+                categoryName: 'สัญญาณอินเทอร์เน็ตหลุดบ่อย',
+                title: 'เกิดการสูญหายของแพ็กเก็ตข้อมูล (Packet Loss)',
+                shortDesc: 'อินเทอร์เน็ตสะดุดเป็นช่วงสั้น ๆ เสียงสนทนาขาดหายเป็นคำ ๆ หรือหลุดออกจากเกมและระบบประชุมออนไลน์บ่อย',
+                illustration: 'packet-loss',
+                symptoms: [
+                    'เสียงพูดในโปรแกรมประชุมออนไลน์ขาด ๆ หาย ๆ เป็นช่วงสั้น ๆ แต่สายไม่ตัด',
+                    'เล่นเกมออนไลน์แล้วตัวละครวาร์ปถอยหลัง หรือขึ้นสัญลักษณ์ Packet Loss',
+                    'หน้าเว็บโหลดค้างกลางคัน ต้องกด Refresh ซ้ำจึงจะแสดงผลครบ'
+                ],
+                causes: [
+                    'สัญญาณรบกวนทางคลื่นแม่เหล็กไฟฟ้า (เช่น ไมโครเวฟ อุปกรณ์บลูทูธ หรือเราเตอร์เพื่อนบ้านใช้ช่องสัญญาณทับซ้อนกัน)',
+                    'สาย LAN ชำรุด หัวสาย RJ45 หลวม หรือสายไฟเบอร์ถูกบีบทับทำให้สัญญาณอ่อนลง',
+                    'เราเตอร์ทำงานหนักเกินขีดจำกัดหรือมีความร้อนสะสมสูง'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบการเชื่อมต่อเบื้องต้น',
+                        detail: 'สังเกตว่าอาการสะดุดเกิดขึ้นเฉพาะเครื่องคอมพิวเตอร์ของคุณ หรือเป็นพร้อมกันกับอุปกรณ์อื่นในเครือข่ายเดียวกัน'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบสาย LAN และตำแหน่งวางเราเตอร์',
+                        detail: 'ตรวจดูสาย LAN ตลอดทั้งเส้นว่าไม่มีรอยขาดหรือหักงอ และวางเราเตอร์ในที่โล่ง ห่างจากอุปกรณ์ไฟฟ้าที่ปล่อยคลื่นรบกวนและไม่วางในตู้ทึบที่ระบายความร้อนไม่ได้'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'รีเฟรชการเชื่อมต่อเครือข่าย',
+                        detail: 'ลองถอดสาย LAN แล้วเสียบใหม่ หรือตัดการเชื่อมต่อ Wi-Fi แล้วเชื่อมต่อใหม่อีกครั้ง'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตเราเตอร์และคอมพิวเตอร์',
+                        detail: 'ปิดเราเตอร์พักไว้ 1 นาทีเพื่อระบายความร้อนและรีเซ็ตการทำงานของชิปประมวลผลเครือข่าย จากนั้นเปิดใช้งานใหม่'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยและตรวจสอบไดรเวอร์',
+                        detail: 'ใช้ Windows Network Troubleshooter ตรวจสอบสถานะการเชื่อมต่อ และตรวจสอบใน Device Manager ว่าการ์ดเครือข่ายไม่มีเครื่องหมายตกใจสีเหลือง'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'ปรับการตั้งค่าประหยัดพลังงานของการ์ดเครือข่าย',
+                        detail: 'ใน Device Manager > Network adapters > คลิกขวาการ์ด Wi-Fi/LAN > Properties > แท็บ Power Management ให้ยกเลิกเครื่องหมายถูกหน้า "Allow the computer to turn off this device to save power"'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งตรวจสอบอัตราการสูญหายของแพ็กเก็ต',
+                        detail: 'เปิด Command Prompt แล้วรันคำสั่งส่งข้อมูลต่อเนื่อง 30 ครั้งเพื่อคำนวณเปอร์เซ็นต์ Packet Loss',
+                        command: 'ping 8.8.8.8 -n 30',
+                        cmdExplain: 'หน้าที่: ทดสอบส่งแพ็กเก็ตจำนวน 30 ชุดและสรุปผลการสูญหาย | ผลลัพธ์: ควรขึ้นว่า "Lost = 0 (0% loss)" หากมีค่า Lost ตั้งแต่ 1% ขึ้นไปแสดงว่าเกิด Packet Loss จริง'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'แนวทางตรวจสอบเพิ่มเติมและติดต่อ ISP',
+                        detail: 'ทดสอบ Ping ไปยัง IP เราเตอร์ในบ้าน (เช่น ping 192.168.1.1 -n 30) หากขึ้น 0% loss แต่เมื่อ ping 8.8.8.8 แล้วมี loss แสดงว่าปัญหาเกิดจากสายสัญญาณภายนอก ให้ติดต่อ ISP ตรวจสอบค่าสัญญาณแสง (Optical Power)'
+                    }
+                ],
+                tips: 'หากต้องใช้ Wi-Fi ในคอนโดหรือหอพักที่มีเราเตอร์หลายตัว ให้เลือกใช้คลื่น 5 GHz เพราะมีช่องสัญญาณที่ไม่ทับซ้อนกันมากกว่า 2.4 GHz',
+                caution: 'อย่าดึงสายไฟเบอร์ออปติกสีเหลือง/ดำด้วยแรงดึงสูง เพราะเส้นใยแก้วภายในอาจแตกร้าวทำให้เกิด Packet Loss ถาวรได้'
+            },
+
+            {
+                id: 'partial-services',
+                category: 'dns',
+                categoryName: 'ปัญหา DNS',
+                title: 'คอมพิวเตอร์เชื่อมต่อเครือข่ายได้ แต่ไม่สามารถใช้งานบริการออนไลน์บางประเภทได้',
+                shortDesc: 'เข้าเว็บไซต์ค้นหาหรือดูวิดีโอได้ปกติ แต่เข้าใช้งานแอปพลิเคชัน เกม ระบบธนาคาร หรือเว็บไซต์เฉพาะทางบางแห่งไม่ได้',
+                illustration: 'partial-service',
+                symptoms: [
+                    'เข้าเว็บไซต์ทั่วไปได้ แต่เข้าใช้งานบริการออนไลน์บางตัวไม่ได้ (เช่น แอปธนาคาร, เกม, ระบบประชุม หรือเว็บองค์กร)',
+                    'หน้าจอแจ้งข้อผิดพลาดเกี่ยวกับการเชื่อมต่อเซิร์ฟเวอร์ หรือ DNS ไม่ตอบสนองเฉพาะบางโดเมน',
+                    'เมื่อสลับไปใช้เน็ตมือถือกลับเข้าใช้งานบริการนั้นได้ตามปกติ'
+                ],
+                causes: [
+                    'DNS Server ของผู้ให้บริการอินเทอร์เน็ตอัปเดตข้อมูลโดเมนล่าช้าหรือเกิดขัดข้องเฉพาะบางชื่อเว็บไซต์',
+                    'มีการตั้งค่า Proxy, VPN หรือส่วนขยายเบราว์เซอร์ (AdBlock / Security Extension) บล็อกการเชื่อมต่อบางพอร์ต',
+                    'แคชของระบบเครือข่าย (DNS Cache / Winsock) บนคอมพิวเตอร์เก็บข้อมูลเก่าที่หมดอายุไว้'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบการเชื่อมต่อกับบริการนั้นบนอุปกรณ์อื่น',
+                        detail: 'ลองเข้าบริการออนไลน์ที่มีปัญหาด้วยสมาร์ทโฟนผ่าน Wi-Fi เดียวกัน และลองสลับเป็น 4G/5G เพื่อแยกแยะว่าปัญหาเป็นที่เครื่องคอมพิวเตอร์หรือเป็นที่เครือข่าย'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบสถานะเซิร์ฟเวอร์ของบริการนั้น ๆ',
+                        detail: 'ตรวจสอบประกาศจากผู้ให้บริการแอปหรือเว็บไซต์นั้นว่าอยู่ในช่วงปิดปรับปรุงเซิร์ฟเวอร์ประจำสัปดาห์หรือไม่'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'ทดสอบเปิดในโหมดไม่ระบุตัวตน (Incognito Mode)',
+                        detail: 'ลองเปิดบริการผ่านหน้าต่าง Incognito/Private ของเบราว์เซอร์ เพื่อตรวจสอบว่าเกิดจากส่วนขยาย (Extension) หรือคุกกี้เก่าค้างอยู่หรือไม่'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตเบราว์เซอร์และคอมพิวเตอร์',
+                        detail: 'ปิดโปรแกรมที่เกี่ยวข้องทั้งหมดแล้วเปิดใหม่ หรือรีสตาร์ตเครื่องคอมพิวเตอร์เพื่อล้างสถานะเซสชันที่ค้าง'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยเครือข่าย (Windows Network Troubleshooter)',
+                        detail: 'รันตัวแก้ไขปัญหาเครือข่ายของ Windows เพื่อตรวจสอบว่าไม่มีการบล็อกการเชื่อมต่อพื้นฐาน'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'ตรวจสอบการตั้งค่า DNS, Proxy และ VPN',
+                        detail: 'ไปที่ Settings > Network & Internet > Proxy ตรวจสอบว่า "Use a proxy server" ปิดอยู่ (Off) และลองเปลี่ยน DNS ใน IPv4 Properties เป็น Public DNS ที่เสถียร เช่น Preferred DNS: 8.8.8.8 และ Alternate DNS: 1.1.1.1'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งล้างแคช DNS และตรวจสอบการแปลงชื่อโดเมน',
+                        detail: 'เปิด Command Prompt แล้วพิมพ์คำสั่งล้างค่า DNS Cache เก่าและทดสอบเรียกชื่อโดเมนที่มีปัญหา',
+                        command: 'ipconfig /flushdns && nslookup google.com',
+                        cmdExplain: 'หน้าที่: ล้างข้อมูล DNS เก่าที่ค้างในเครื่อง และทดสอบให้เซิร์ฟเวอร์แปลงชื่อโดเมนเป็นเลข IP | ผลลัพธ์: ขึ้น "Successfully flushed the DNS Resolver Cache" และแสดงเลข Address ของโดเมน'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'แนวทางตรวจสอบเพิ่มเติม',
+                        detail: 'หากยังไม่สามารถใช้งานบริการเฉพาะทางได้ (เช่น ระบบ VPN ของบริษัท หรือพอร์ตเกมเฉพาะ) ให้ตรวจสอบการตั้งค่า CGNAT หรือติดต่อผู้ให้บริการอินเทอร์เน็ต (ISP) เพื่อสอบถามเรื่องการเปิดพอร์ตหรือเส้นทาง Routing'
+                    }
+                ],
+                tips: 'การเปลี่ยนมาใช้ Public DNS อย่าง Google DNS (8.8.8.8 / 8.8.4.4) หรือ Cloudflare DNS (1.1.1.1 / 1.0.0.1) ช่วยแก้ปัญหาเข้าบางเว็บไม่ได้บ่อยครั้งได้อย่างรวดเร็ว',
+                caution: 'ไม่ควรปิด Windows Defender Firewall ทั้งหมดเพื่อทดสอบบริการออนไลน์ หากจำเป็นต้องอนุญาตโปรแกรม ให้เพิ่มสิทธิ์เฉพาะโปรแกรมนั้นในรายการ Allow an app through firewall'
+            },
+
+            {
+                id: 'wifi-not-showing',
+                category: 'wifi',
+                categoryName: 'การเชื่อมต่อ Wi-Fi',
+                title: 'คอมพิวเตอร์มองไม่เห็นสัญญาณ Wi-Fi หรือเชื่อมต่อ Wi-Fi ไม่สำเร็จ',
+                shortDesc: 'ไอคอนรูปโลกปรากฏแทนรูปคลื่น Wi-Fi ไม่มีรายชื่อสัญญาณให้เลือก หรือกดเชื่อมต่อแล้วไม่ผ่าน',
+                illustration: 'wifi-missing',
+                symptoms: [
+                    'คลิกที่เมนูเครือข่ายมุมขวาล่างแล้วไม่มีปุ่มเปิด Wi-Fi หรือไม่แสดงรายชื่อสัญญาณรอบตัวเลย',
+                    'มือถือที่วางอยู่ข้าง ๆ มองเห็น Wi-Fi ปกติ แต่โน้ตบุ๊กมองไม่เห็น',
+                    'กดเชื่อมต่อแล้วขึ้นข้อความ "Can\'t connect to this network"'
+                ],
+                causes: [
+                    'เผลอกดปุ่มลัดบนคีย์บอร์ดปิดโหมดไร้สาย (Airplane Mode หรือปุ่ม Fn + สัญลักษณ์เสาสัญญาณ)',
+                    'บริการ WLAN AutoConfig ของ Windows หยุดทำงาน หรือไดรเวอร์ Wi-Fi ค้าง',
+                    'รหัสผ่าน Wi-Fi ของเราเตอร์ถูกเปลี่ยนใหม่ แต่คอมพิวเตอร์ยังจำรหัสผ่านเดิมไว้'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบเบื้องต้นบนอุปกรณ์อื่นและโหมดเครื่องบิน',
+                        detail: 'เช็กว่ามือถือมองเห็นชื่อ Wi-Fi หรือไม่ และดูที่แถบสถานะของคอมพิวเตอร์ว่าไม่ได้เปิด Airplane Mode (รูปเครื่องบิน) ค้างไว้'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบเราเตอร์และสวิตช์เปิด-ปิด Wi-Fi',
+                        detail: 'ดูไฟสถานะ WLAN หรือ Wi-Fi 2.4G / 5G บนเราเตอร์ว่าติดสว่างอยู่หรือไม่ (เราเตอร์บางรุ่นมีปุ่มเปิด-ปิด Wi-Fi ด้านข้างตัวเครื่อง)'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'สั่งลืมเครือข่ายเก่า (Forget Network) และเชื่อมต่อใหม่',
+                        detail: 'หากมองเห็นชื่อ Wi-Fi แต่เชื่อมต่อไม่ได้ ให้คลิกขวาที่ชื่อ Wi-Fi นั้น เลือก "Forget" แล้วคลิก Connect เพื่อกรอกรหัสผ่านใหม่อีกครั้ง'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตคอมพิวเตอร์อย่างสมบูรณ์',
+                        detail: 'เลือกคำสั่ง Restart (ไม่ใช่ Shut down แล้วเปิดใหม่ เพราะ Fast Startup อาจเก็บสถานะค้างไว้) เพื่อโหลดการทำงานของการ์ด Wi-Fi ใหม่'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยเครือข่าย (Windows Network Troubleshooter)',
+                        detail: 'คลิกขวาที่ไอคอนเครือข่าย > Diagnose network problems ระบบจะตรวจสอบสถานะของ Wireless Adapter และเปิดใช้งานให้อัตโนมัติ'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'ตรวจสอบสถานะการ์ด Wi-Fi ใน Device Manager',
+                        detail: 'คลิกขวาปุ่ม Start > Device Manager > ขยายหัวข้อ Network adapters ดูที่ชื่อที่มีคำว่า Wireless หรือ Wi-Fi หากมีลูกศรชี้ลงให้คลิกขวาเลือก Enable device'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งรีเซ็ตโปรไฟล์ไร้สายผ่าน Command Prompt',
+                        detail: 'เปิด Command Prompt แบบ Administrator เพื่อดูสถานะไดรเวอร์ไร้สาย',
+                        command: 'netsh wlan show drivers',
+                        cmdExplain: 'หน้าที่: ตรวจสอบการทำงานและสถานะของไดรเวอร์ Wi-Fi บนเครื่อง | ผลลัพธ์: จะแสดงรายละเอียดชิปไร้สายและเวอร์ชันไดรเวอร์ที่พร้อมใช้งาน'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'แนวทางตรวจสอบเพิ่มเติม',
+                        detail: 'หากใน Device Manager ไม่พบชื่อการ์ด Wi-Fi เลย อาจเกิดจากตัวรับสัญญาณ Wi-Fi ภายในเครื่องขัดข้อง สามารถใช้ตัวรับสัญญาณ USB Wi-Fi Adapter เสียบใช้งานแทนหรือส่งศูนย์บริการตรวจสอบ'
+                    }
+                ],
+                tips: 'บน Windows 10/11 การกด "Restart" แตกต่างจาก "Shut down" เพราะ Restart จะล้างสถานะฮาร์ดแวร์และไดรเวอร์ใหม่ทั้งหมด',
+                caution: 'หลีกเลี่ยงการกด Uninstall ไดรเวอร์ Wi-Fi หากไม่มีไฟล์ติดตั้งไดรเวอร์สำรองหรือสาย LAN เตรียมไว้ เพราะอาจทำให้ดาวน์โหลดไดรเวอร์กลับมาไม่ได้'
+            },
+
+            {
+                id: 'slow-internet-peak',
+                category: 'slow',
+                categoryName: 'อินเทอร์เน็ตช้า',
+                title: 'ความเร็วอินเทอร์เน็ตช้าผิดปกติในบางช่วงเวลา',
+                shortDesc: 'ดาวน์โหลดไฟล์ช้า วิดีโอความละเอียดลดลงเหลือ 360p และหน้าเว็บโหลดไม่สมบูรณ์โดยเฉพาะช่วงหัวค่ำ',
+                illustration: 'slow-net',
+                symptoms: [
+                    'ทดสอบความเร็ว (Speedtest) ได้ค่า Download/Upload ต่ำกว่าแพ็กเกจที่สมัครไว้มาก',
+                    'ดูวิดีโอ YouTube หรือสตรีมมิ่งแล้วหมุนค้างบ่อย',
+                    'อาการช้าเกิดชัดเจนในช่วงเวลาที่มีผู้ใช้งานพร้อมกันจำนวนมาก'
+                ],
+                causes: [
+                    'เชื่อมต่อ Wi-Fi คลื่น 2.4 GHz ซึ่งมีความเร็วสูงสุดจำกัดและมีสัญญาณรบกวนสูง',
+                    'มีอุปกรณ์ในบ้านใช้งานหนักพร้อมกัน (ดูหนัง 4K, กล้องวงจรปิดอัปโหลดขึ้นคลาวด์, ดาวน์โหลดเกม)',
+                    'Windows Update หรือโปรแกรมสำรองข้อมูลกำลังดาวน์โหลดไฟล์ขนาดใหญ่อยู่เบื้องหลัง'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบความเร็วเบื้องต้นและอุปกรณ์อื่น',
+                        detail: 'ทดลองวัดความเร็วอินเทอร์เน็ตผ่านเว็บไซต์ทดสอบความเร็วมาตรฐาน (เช่น fast.com หรือ speedtest.net) และเทียบกับสมาร์ทโฟนที่อยู่จุดเดียวกัน'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบสาย LAN และคลื่นความถี่ Wi-Fi',
+                        detail: 'หากใช้สาย LAN ตรวจสอบว่าสายรองรับความเร็วระดับ Gigabit (Cat5e หรือ Cat6) และหากใช้ Wi-Fi ให้ย้ายมาเชื่อมต่อย่านความถี่ 5 GHz'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'ตัดการเชื่อมต่ออุปกรณ์ที่ไม่ได้ใช้งานชั่วคราว',
+                        detail: 'ลองปิด Wi-Fi บนอุปกรณ์อื่นที่ไม่ได้ใช้งาน เพื่อทดสอบว่าความเร็วบนคอมพิวเตอร์กลับคืนมาหรือไม่'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตเราเตอร์',
+                        detail: 'ปิดเราเตอร์ 30 วินาทีแล้วเปิดใหม่ เพื่อให้เราเตอร์เลือกช่องสัญญาณไร้สาย (Wi-Fi Channel) ที่ว่างและรบกวนน้อยที่สุดอัตโนมัติ'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยและตรวจสอบการใช้เน็ตเบื้องหลัง',
+                        detail: 'เปิด Task Manager (Ctrl + Shift + Esc) > แท็บ Processes คลิกที่หัวคอลัมน์ "Network" เพื่อเรียงลำดับดูว่าโปรแกรมใดกำลังดึงความเร็วอินเทอร์เน็ตสูงสุด'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'ตั้งค่าจำกัดแบนด์วิดท์ของ Windows Update',
+                        detail: 'ไปที่ Settings > Windows Update > Advanced options > Delivery Optimization > Advanced options เพื่อกำหนดไม่ให้ Windows ดึงความเร็วอินเทอร์เน็ตทั้งหมดไปใช้ระหว่างอัปเดต'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งตรวจสอบความเร็วลิงก์เชื่อมต่อ (Link Speed)',
+                        detail: 'เปิด Command Prompt เพื่อดูว่าการ์ดเครือข่ายเชื่อมต่อกับเราเตอร์ที่ความเร็วระดับใด',
+                        command: 'netsh wlan show interfaces',
+                        cmdExplain: 'หน้าที่: แสดงรายละเอียดคลื่นความถี่ ช่องสัญญาณ และความเร็วลิงก์ (Receive/Transmit rate) | ผลลัพธ์: คลื่น 5 GHz ควรมีความเร็วลิงก์ตั้งแต่ 300 - 866 Mbps ขึ้นไป'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'แนวทางตรวจสอบเพิ่มเติมและติดต่อ ISP',
+                        detail: 'หากทดสอบผ่านสาย LAN Cat6 โดยปิดโปรแกรมอื่นทั้งหมดแล้วความเร็วยังต่ำกว่าแพ็กเกจอย่างมาก ให้ติดต่อผู้ให้บริการอินเทอร์เน็ตเพื่อตรวจสอบสัญญาณคู่สายหรืออัปเกรดอุปกรณ์เราเตอร์'
+                    }
+                ],
+                tips: 'หากใช้สาย LAN รุ่นเก่า (Cat5) ความเร็วจะถูกจำกัดไว้สูงสุดเพียง 100 Mbps เท่านั้น ควรเปลี่ยนเป็นสาย Cat5e หรือ Cat6 เพื่อรองรับเน็ตความเร็วสูง 500-1000 Mbps',
+                caution: 'ไม่ควรติดตั้งโปรแกรมประเภท "เร่งความเร็วอินเทอร์เน็ต" จากแหล่งที่ไม่น่าเชื่อถือ เพราะมักแฝงโฆษณาหรือมัลแวร์ที่ทำให้เครื่องช้าลงกว่าเดิม'
+            },
+
+            {
+                id: 'wifi-disconnect-often',
+                category: 'disconnect',
+                categoryName: 'สัญญาณอินเทอร์เน็ตหลุดบ่อย',
+                title: 'สัญญาณ Wi-Fi หลุดบ่อยต้องกดเชื่อมต่อใหม่ตลอด',
+                shortDesc: 'ใช้งานไปสักพักสัญลักษณ์ Wi-Fi ตัดการเชื่อมต่อเอง ต้องคอยกด Connect ใหม่ซ้ำ ๆ ตลอดวัน',
+                illustration: 'wifi-drop',
+                symptoms: [
+                    'Wi-Fi ตัดการเชื่อมต่อเองทุก ๆ 5-15 นาที แล้วต้องกดเชื่อมต่อใหม่',
+                    'เกิดขึ้นเฉพาะเวลาใช้งานโน้ตบุ๊กด้วยแบตเตอรี่ (ไม่ได้เสียบสายชาร์จ)',
+                    'เมื่ออยู่ใกล้เราเตอร์สัญญาณเต็ม แต่พอเดินย้ายห้องสัญญาณหลุดทันที'
+                ],
+                causes: [
+                    'โหมดประหยัดพลังงานของ Windows สั่งปิดการ์ด Wi-Fi อัตโนมัติเพื่อประหยัดแบตเตอรี่',
+                    'เราเตอร์ตั้งชื่อ Wi-Fi 2.4 GHz และ 5 GHz เป็นชื่อเดียวกัน (Band Steering) ทำให้คอมพิวเตอร์สลับคลื่นไปมาจนหลุด',
+                    'ระยะทางไกลเกินขอบเขตของคลื่น 5 GHz หรือมีสิ่งกีดขวางหนาแน่น'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบการเชื่อมต่อเบื้องต้น',
+                        detail: 'สอบถามผู้ใช้งานคนอื่นในบ้านว่าพบอาการ Wi-Fi หลุดพร้อมกันหรือไม่ เพื่อแยกแยะว่าเป็นที่ตัวเราเตอร์หรือเฉพาะโน้ตบุ๊กเครื่องนี้'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบระยะห่างและสิ่งกีดขวาง',
+                        detail: 'ทดลองนำโน้ตบุ๊กมาใช้งานในห้องเดียวกับเราเตอร์ประมาณ 15 นาที หากไม่หลุด แสดงว่าจุดเดิมอยู่ไกลเกินไป ควรพิจารณาติดตั้งตัวขยายสัญญาณ (Mesh Wi-Fi)'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'สั่งลืมเครือข่ายและเชื่อมต่อใหม่',
+                        detail: 'คลิกขวาที่ชื่อ Wi-Fi เลือก Forget แล้วกดเชื่อมต่อใหม่ พร้อมติ๊กถูกที่ช่อง "Connect automatically"'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตเราเตอร์และคอมพิวเตอร์',
+                        detail: 'ปิด-เปิดเราเตอร์และรีสตาร์ตโน้ตบุ๊กเพื่อเริ่มต้นเซสชันการเชื่อมต่อไร้สายใหม่'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยเครือข่าย (Windows Network Troubleshooter)',
+                        detail: 'รันตัวแก้ไขปัญหาเครือข่ายของ Windows เพื่อตรวจสอบความสมบูรณ์ของโปรไฟล์ Wi-Fi'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'ปิดโหมดประหยัดพลังงานของการ์ด Wi-Fi',
+                        detail: 'ไปที่ Control Panel > Power Options > Change plan settings > Change advanced power settings > ขยายหัวข้อ Wireless Adapter Settings > Power Saving Mode แล้วเปลี่ยนเป็น "Maximum Performance"'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งรีเซ็ตค่าเครือข่าย TCP/IP และ Winsock',
+                        detail: 'เปิด Command Prompt แบบ Administrator แล้วรันคำสั่งรีเซ็ตโปรโตคอลเครือข่ายให้กลับสู่สภาพสมบูรณ์',
+                        command: 'netsh winsock reset',
+                        cmdExplain: 'หน้าที่: รีเซ็ตระบบจัดการซ็อกเก็ตเครือข่ายของ Windows ที่อาจทำงานผิดพลาดจนทำให้เน็ตหลุดบ่อย | ผลลัพธ์: ขึ้นข้อความให้รีสตาร์ตคอมพิวเตอร์ 1 ครั้งเพื่อให้การเปลี่ยนแปลงมีผล'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'แนวทางตรวจสอบเพิ่มเติม',
+                        detail: 'หากเราเตอร์รวมชื่อ 2.4G และ 5G เป็นชื่อเดียว (Smart Connect) ให้ลองแยกชื่อ SSID ออกจากกัน หรือติดต่อผู้ให้บริการอินเทอร์เน็ตช่วยตั้งค่าแยกชื่อคลื่นความถี่ให้'
+                    }
+                ],
+                tips: 'การตั้งค่า Wireless Adapter เป็น "Maximum Performance" ช่วยแก้ปัญหาโน้ตบุ๊ก Wi-Fi หลุดเวลาถอดสายชาร์จได้อย่างมีประสิทธิภาพ',
+                caution: 'หลังใช้คำสั่ง netsh winsock reset ต้องทำการ Restart เครื่องคอมพิวเตอร์ทุกครั้งเพื่อให้ระบบเครือข่ายกลับมาทำงานสมบูรณ์'
+            },
+
+            {
+                id: 'dns-nxdomain',
+                category: 'dns',
+                categoryName: 'ปัญหา DNS',
+                title: 'ขึ้นข้อความ DNS_PROBE_FINISHED_NXDOMAIN เข้าเว็บไม่ได้',
+                shortDesc: 'เบราว์เซอร์แสดงหน้าจอแจ้งข้อผิดพลาด DNS_PROBE_FINISHED_NXDOMAIN ไม่สามารถเข้าถึงเว็บไซต์ได้',
+                illustration: 'dns-error',
+                symptoms: [
+                    'หน้าจอ Google Chrome หรือ Microsoft Edge ขึ้นข้อความ "This site can’t be reached" พร้อมรหัส DNS_PROBE_FINISHED_NXDOMAIN',
+                    'ตรวจสอบมุมขวาล่างพบว่าสัญญาณ Wi-Fi ยังเชื่อมต่ออยู่ตามปกติ',
+                    'เกิดกับเว็บไซต์ที่เคยเข้าใช้งานได้มาก่อน'
+                ],
+                causes: [
+                    'แคชของ DNS (DNS Resolver Cache) ในคอมพิวเตอร์เก็บข้อมูลที่ล้าสมัยหรือเสียหาย',
+                    'DNS Server ที่ได้รับจากเราเตอร์ไม่ตอบสนองชั่วคราว',
+                    'บริการ DNS Client Service ใน Windows หยุดทำงาน'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบเบื้องต้นและพิมพ์ URL ให้ถูกต้อง',
+                        detail: 'ตรวจสอบว่าไม่ได้สะกดชื่อเว็บไซต์ผิด และลองเปิดเว็บไซต์อื่น (เช่น google.com) หรือทดสอบเข้าเว็บเดียวกันผ่านมือถือ'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบอุปกรณ์เครือข่าย',
+                        detail: 'ดูไฟสถานะ Internet บนเราเตอร์ว่าติดปกติ ไม่ได้ตัดการเชื่อมต่อจากผู้ให้บริการ'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'ปิดและเปิดเบราว์เซอร์หรือเชื่อมต่อเครือข่ายใหม่',
+                        detail: 'ปิดหน้าต่างเบราว์เซอร์ทั้งหมดแล้วเปิดใหม่ หรือตัดการเชื่อมต่อ Wi-Fi แล้วเชื่อมต่ออีกครั้ง'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตเราเตอร์และคอมพิวเตอร์',
+                        detail: 'รีสตาร์ตเราเตอร์ 1 ครั้งเพื่อให้เราเตอร์อัปเดตตาราง DNS จากผู้ให้บริการอินเทอร์เน็ตใหม่'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยเครือข่าย (Windows Network Troubleshooter)',
+                        detail: 'รันตัวแก้ไขปัญหาเครือข่ายของ Windows ซึ่งจะช่วยตรวจสอบและรีเฟรชค่า DNS อัตโนมัติ'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'เปลี่ยนไปใช้ Public DNS มาตรฐาน',
+                        detail: 'เข้าไปที่การตั้งค่า IPv4 Properties ของตัวเชื่อมต่อ เลือก "Use the following DNS server addresses" แล้วกรอก Preferred DNS: 8.8.8.8 และ Alternate DNS: 1.1.1.1 จากนั้นกด OK'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งล้างแคช DNS (Flush DNS)',
+                        detail: 'เปิด Command Prompt แบบ Administrator แล้วรันคำสั่งล้างข้อมูล DNS ที่ค้างอยู่ในเครื่อง',
+                        command: 'ipconfig /flushdns',
+                        cmdExplain: 'หน้าที่: ลบข้อมูลที่อยู่เว็บไซต์เก่าที่เก็บไว้ในหน่วยความจำแคชของคอมพิวเตอร์ | ผลลัพธ์: แสดงข้อความ "Successfully flushed the DNS Resolver Cache"'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'แนวทางตรวจสอบเพิ่มเติม',
+                        detail: 'หากเข้าไม่ได้เพียงเว็บไซต์เดียวในโลก แต่เว็บอื่นเข้าได้ทั้งหมด แสดงว่าชื่อโดเมนของเว็บไซต์นั้นอาจหมดอายุหรือเจ้าของเว็บไซต์ปิดปรับปรุงชั่วคราว'
+                    }
+                ],
+                tips: 'คำว่า NXDOMAIN ย่อมาจาก Non-Existent Domain หมายถึงระบบ DNS ค้นหาชื่อเว็บไซต์นั้นไม่พบ',
+                caution: 'ควรใช้เลข DNS ที่น่าเชื่อถือระดับสากลเท่านั้น เช่น 8.8.8.8 (Google) หรือ 1.1.1.1 (Cloudflare) หลีกเลี่ยงการใช้เลข DNS ที่ไม่ทราบแหล่งที่มา'
+            },
+
+            {
+                id: 'no-internet-secured',
+                category: 'cant-open',
+                categoryName: 'เชื่อมต่อแล้วเข้าเว็บไซต์ไม่ได้',
+                title: 'เชื่อมต่อ Wi-Fi ได้ขึ้น No Internet, Secured',
+                shortDesc: 'คอมพิวเตอร์เชื่อมต่อกับเราเตอร์ได้สำเร็จ แต่ขึ้นสถานะ "No Internet, Secured" ทำให้เปิดเว็บไม่ได้เลย',
+                illustration: 'no-net-secured',
+                symptoms: [
+                    'ใต้ชื่อ Wi-Fi แสดงข้อความว่า "No Internet, Secured" (ไม่มีอินเทอร์เน็ต, ปลอดภัย)',
+                    'สัญลักษณ์มุมขวาล่างเปลี่ยนเป็นรูปโลกมีเครื่องหมายขีดฆ่า',
+                    'เปิดโปรแกรมแชท อีเมล หรือเบราว์เซอร์ไม่ได้เลย'
+                ],
+                causes: [
+                    'เราเตอร์ค้างหรือหลุดการเชื่อมต่อกับผู้ให้บริการอินเทอร์เน็ตชั่วคราว',
+                    'วันที่และเวลาบนคอมพิวเตอร์ไม่ตรงกับปัจจุบัน ทำให้ใบรับรองความปลอดภัย (SSL) ปฏิเสธการเชื่อมต่อ',
+                    'ระบบ TCP/IP หรือ Winsock บนคอมพิวเตอร์เกิดข้อผิดพลาด'
+                ],
+                steps: [
+                    {
+                        stepNum: 1,
+                        title: 'ตรวจสอบเบื้องต้นกับอุปกรณ์อื่น',
+                        detail: 'เช็กสมาร์ทโฟนที่เชื่อมต่อ Wi-Fi เดียวกันว่าขึ้น No Internet ด้วยหรือไม่ หากเป็นเหมือนกันทุกเครื่อง ปัญหาอยู่ที่เราเตอร์หรือผู้ให้บริการ'
+                    },
+                    {
+                        stepNum: 2,
+                        title: 'ตรวจสอบสายสัญญาณและไฟสถานะเราเตอร์',
+                        detail: 'ตรวจดูไฟแสดงสถานะ Internet / PON บนเราเตอร์ว่าติดสีเขียวปกติ และสาย LAN / สายไฟเบอร์ไม่หลวม'
+                    },
+                    {
+                        stepNum: 3,
+                        title: 'ตัดการเชื่อมต่อและเชื่อมต่อใหม่',
+                        detail: 'กดปุ่ม Disconnect ใต้ชื่อ Wi-Fi รอ 10 วินาที แล้วกด Connect ใหม่อีกครั้ง'
+                    },
+                    {
+                        stepNum: 4,
+                        title: 'รีสตาร์ตเราเตอร์และคอมพิวเตอร์',
+                        detail: 'ถอดปลั๊กเราเตอร์ทิ้งไว้ 30 วินาทีแล้วเสียบใหม่ จากนั้นรีสตาร์ตเครื่องคอมพิวเตอร์'
+                    },
+                    {
+                        stepNum: 5,
+                        title: 'ใช้เครื่องมือวินิจฉัยเครือข่าย (Windows Network Troubleshooter)',
+                        detail: 'คลิกขวาที่ไอคอนรูปโลกมุมขวาล่าง เลือก Diagnose network problems เพื่อให้ Windows แก้ไขค่าการเชื่อมต่อพื้นฐาน'
+                    },
+                    {
+                        stepNum: 6,
+                        title: 'ตรวจสอบวันที่และเวลาของระบบ (Date & Time)',
+                        detail: 'คลิกขวาที่นาฬิกามุมขวาล่าง > Adjust date and time ตรวจสอบให้ตั้งเวลาและโซนเวลา (UTC+07:00 Bangkok) ถูกต้อง และกดปุ่ม "Sync now"'
+                    },
+                    {
+                        stepNum: 7,
+                        title: 'ใช้คำสั่งรีเซ็ตค่า IP และ TCP/IP',
+                        detail: 'เปิด Command Prompt แบบ Administrator แล้วพิมพ์คำสั่งด้านล่างเพื่อรีเซ็ตระบบการเชื่อมต่ออินเทอร์เน็ต',
+                        command: 'netsh int ip reset',
+                        cmdExplain: 'หน้าที่: รีเซ็ตการตั้งค่าโปรโตคอล TCP/IP ของ Windows กลับสู่ค่ามาตรฐานที่สมบูรณ์ | ผลลัพธ์: ขึ้นสถานะ Resetting ... OK! จากนั้นให้รีสตาร์ตเครื่อง'
+                    },
+                    {
+                        stepNum: 8,
+                        title: 'แนวทางตรวจสอบเพิ่มเติมและติดต่อ ISP',
+                        detail: 'หากดำเนินการครบทุกขั้นตอนแล้วยังขึ้น No Internet, Secured ทั้งที่อุปกรณ์อื่นก็เข้าไม่ได้ ให้ติดต่อศูนย์บริการลูกค้าของผู้ให้บริการอินเทอร์เน็ตเพื่อรีเซ็ตสัญญาณพอร์ตจากส่วนกลาง'
+                    }
+                ],
+                tips: 'บางครั้งเราเตอร์แค่ค้างจากการทำงานต่อเนื่องหลายสัปดาห์ การปิด-เปิดเราเตอร์ใหม่ 1 นาทีสามารถแก้ปัญหา No Internet, Secured ได้ทันที',
+                caution: 'อย่ากดปุ่ม Reset คืนค่าโรงงานที่ตัวเราเตอร์เอง หากไม่ทราบการตั้งค่าบัญชีอินเทอร์เน็ตของผู้ให้บริการ'
+            }
+        ];
+
+        // ---------------------------------------------------------------------
+        // 4. KNOWLEDGE ARTICLES DATA (บทความความรู้เกี่ยวกับอินเทอร์เน็ต)
+        // ---------------------------------------------------------------------
+        const articlesData = [
+            {
+                id: 'router-lights',
+                tag: 'อุปกรณ์เครือข่าย',
+                readTime: 'อ่าน 3 นาที',
+                title: 'วิธีสังเกตไฟสถานะบนเราเตอร์ (POWER, PON, LOS, WLAN) บอกอะไรเราบ้าง?',
+                summary: 'เรียนรู้ความหมายของไฟสัญลักษณ์แต่ละดวงบนกล่องเราเตอร์ไฟเบอร์ เพื่อแยกแยะได้ทันทีว่าปัญหาเกิดจากตัวเราเตอร์ สายขาด หรือคอมพิวเตอร์ของเราเอง',
+                illustration: 'art-router',
+                content: [
+                    {
+                        heading: '1. ไฟ POWER (ไฟเลี้ยงระบบ)',
+                        text: 'ต้องติดสว่างค้าง (มักเป็นสีเขียวหรือสีขาว) หากไฟดวงนี้ดับ ให้ตรวจสอบปลั๊กไฟ สวิตช์เปิด-ปิดหลังเครื่อง หรืออะแดปเตอร์แปลงไฟ'
+                    },
+                    {
+                        heading: '2. ไฟ PON หรือ INTERNET (สถานะสัญญาณจากผู้ให้บริการ)',
+                        text: 'หากติดสว่างค้าง แสดงว่าเราเตอร์ได้รับสัญญาณอินเทอร์เน็ตจากชุมสายผู้ให้บริการเรียบร้อยแล้ว หากกระพริบช้า ๆ แสดงว่ากำลังจับสัญญาณ'
+                    },
+                    {
+                        heading: '3. ไฟ LOS (Loss of Signal - สัญญาณขาดหาย)',
+                        text: 'ในสภาวะปกติ ไฟ LOS ต้องดับสนิท! หากไฟ LOS ติดกระพริบสีแดง แสดงว่าสายใยแก้วนำแสง (Fiber Optic) ภายนอกหรือในบ้านขาด หักงอ หรือชุมสายมีปัญหา ต้องติดต่อผู้ให้บริการอินเทอร์เน็ต'
+                    },
+                    {
+                        heading: '4. ไฟ WLAN / 2.4G / 5G (การกระจายสัญญาณไร้สาย)',
+                        text: 'หากติดสว่างหรือกระพริบถี่ ๆ แสดงว่าเราเตอร์กำลังปล่อยสัญญาณ Wi-Fi พร้อมให้คอมพิวเตอร์และมือถือเชื่อมต่อได้ตามปกติ'
+                    }
+                ]
+            },
+            {
+                id: 'wifi-bands',
+                tag: 'ระบบ Wi-Fi',
+                readTime: 'อ่าน 4 นาที',
+                title: 'Wi-Fi 2.4 GHz ต่างจาก 5 GHz อย่างไร? เลือกใช้อย่างไรให้เน็ตแรงและไม่หลุด',
+                summary: 'ทำความเข้าใจข้อดีและข้อจำกัดของคลื่นความถี่ Wi-Fi ทั้งสองย่าน เพื่อเลือกเชื่อมต่อให้เหมาะกับระยะห่างและลักษณะการใช้งานบนคอมพิวเตอร์',
+                illustration: 'art-bands',
+                content: [
+                    {
+                        heading: 'คลื่นความถี่ 2.4 GHz (เน้นระยะไกล ทะลุสิ่งกีดขวาง)',
+                        text: 'มีจุดเด่นที่ส่งสัญญาณได้ไกลและทะลุผ่านผนังปูนหรือชั้นบ้านได้ดี แต่มีความเร็วสูงสุดจำกัด (ประมาณ 50-100 Mbps) และถูกรบกวนจากอุปกรณ์ไฟฟ้าหรือ Wi-Fi ข้างบ้านได้ง่าย เหมาะสำหรับเครื่องที่อยู่ไกลจากเราเตอร์'
+                    },
+                    {
+                        heading: 'คลื่นความถี่ 5 GHz (เน้นความเร็วสูง สัญญาณเสถียร)',
+                        text: 'รองรับความเร็วอินเทอร์เน็ตสูง (300-1000 Mbps) มีช่องสัญญาณกว้างและถูกรบกวนน้อยมาก เหมาะสำหรับการเล่นเกมออนไลน์ ประชุมวิดีโอคอล และดาวน์โหลดไฟล์ขนาดใหญ่ แต่ระยะส่งสัญญาณจะสั้นกว่าและแพ้กำแพงหนา'
+                    },
+                    {
+                        heading: 'คำแนะนำในการเลือกใช้งาน',
+                        text: 'หากคอมพิวเตอร์หรือโน้ตบุ๊กอยู่ในห้องเดียวกับเราเตอร์หรือห่างไม่เกิน 1 ผนังกั้น ควรเลือกเชื่อมต่อชื่อ Wi-Fi ที่มีคำว่า _5G เสมอ เพื่อประสิทธิภาพสูงสุด'
+                    }
+                ]
+            },
+            {
+                id: 'what-is-dns',
+                tag: 'โลกอินเทอร์เน็ต',
+                readTime: 'อ่าน 3 นาที',
+                title: 'DNS คืออะไร? ทำไมการเปลี่ยน DNS จึงช่วยแก้ปัญหาเข้าบางเว็บไซต์ไม่ได้',
+                summary: 'รู้จักระบบแปลชื่อโดเมนที่เปรียบเสมือนสมุดโทรศัพท์ของโลกอินเทอร์เน็ต พร้อมวิธีเลือกใช้ Public DNS ที่รวดเร็วและปลอดภัย',
+                illustration: 'art-dns',
+                content: [
+                    {
+                        heading: 'DNS เปรียบเสมือนสมุดโทรศัพท์ของอินเทอร์เน็ต',
+                        text: 'คอมพิวเตอร์สื่อสารกันด้วยตัวเลขที่เรียกว่า IP Address (เช่น 142.250.199.14) แต่คนเราจำชื่อเว็บไซต์ได้ง่ายกว่า (เช่น google.com) ระบบ DNS (Domain Name System) จึงทำหน้าที่แปลงชื่อเว็บไซต์ให้เป็นเลข IP โดยอัตโนมัติ'
+                    },
+                    {
+                        heading: 'ทำไมบางครั้งเราเข้าได้แค่บางเว็บ?',
+                        text: 'หากเซิร์ฟเวอร์ DNS ของผู้ให้บริการอินเทอร์เน็ตทำงานช้าหรือค้าง คอมพิวเตอร์จะหาเลข IP ของเว็บไซต์ไม่พบ ทำให้ขึ้นหน้าต่างแจ้งเตือนข้อผิดพลาด แม้สัญญาณ Wi-Fi จะเต็มขีดก็ตาม'
+                    },
+                    {
+                        heading: 'Public DNS มาตรฐานที่แนะนำ',
+                        text: 'ผู้ใช้งานสามารถตั้งค่า DNS สำรองที่เสถียรระดับโลกได้ฟรี เช่น Google Public DNS (8.8.8.8 และ 8.8.4.4) หรือ Cloudflare DNS (1.1.1.1 และ 1.0.0.1) ซึ่งช่วยเพิ่มความเร็วในการเปิดหน้าเว็บได้อีกด้วย'
+                    }
+                ]
+            }
+        ];
+
+        // ---------------------------------------------------------------------
+        // 5. STATE MANAGEMENT & NAVIGATION FUNCTIONS
+        // ---------------------------------------------------------------------
+        let currentCategory = 'all';
+        let currentSearchQuery = '';
+
+        // Initialize App on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            renderProblems();
+            renderArticles();
+            setupScrollListener();
+        });
+
+        // Switch from Welcome Screen to Main Website
+        function enterMainSite(targetSectionId = null) {
+            const welcomeView = document.getElementById('welcome-view');
+            const mainApp = document.getElementById('main-app');
+            
+            welcomeView.classList.add('hidden');
+            mainApp.classList.remove('hidden');
+            mainApp.classList.add('fade-in');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (targetSectionId) {
+                setTimeout(() => {
+                    navigateToSection(targetSectionId);
+                }, 100);
+            }
+        }
+
+        // Return to Welcome Screen (ปุ่ม "หน้าแรก")
+        function showWelcomePage() {
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('welcome-view').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Navigate to Main Home View
+        function navigateToHome() {
+            document.getElementById('problem-detail-view').classList.add('hidden');
+            document.getElementById('article-detail-view').classList.add('hidden');
+            document.getElementById('home-content-view').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Navigate to Specific Section on Main Page
+        function navigateToSection(sectionId) {
+            navigateToHome();
+            setTimeout(() => {
+                const el = document.getElementById(sectionId);
+                if (el) {
+                    const yOffset = -85;
+                    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            }, 60);
+        }
+
+        // Hero Button "เริ่มค้นหาปัญหา"
+        function focusSearchAndScroll() {
+            navigateToHome();
+            const searchInput = document.getElementById('global-search-input');
+            searchInput.focus();
+            navigateToSection('categories-section');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // ---------------------------------------------------------------------
+        // 6. RENDER CATEGORIES & FILTERING
+        // ---------------------------------------------------------------------
+        function renderCategories() {
+            const container = document.getElementById('category-cards-container');
+            container.innerHTML = categoriesData.map(cat => {
+                const isSelected = currentCategory === cat.id;
+                const activeClasses = isSelected 
+                    ? 'ring-2 ring-sage-600 bg-sage-600 text-white shadow-md -translate-y-0.5' 
+                    : `${cat.bg} ${cat.border} text-sage-900 hover:shadow-card hover:-translate-y-0.5`;
+                const iconBoxClasses = isSelected
+                    ? 'bg-white/20 text-white'
+                    : `bg-white ${cat.iconColor} shadow-sm`;
+                const countClasses = isSelected
+                    ? 'text-sage-100'
+                    : 'text-sage-600';
+
+                return `
+                    <button onclick="selectCategory('${cat.id}')" class="p-4 rounded-2xl border transition-all duration-200 flex flex-col items-center text-center gap-2.5 cursor-pointer ${activeClasses}">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg ${iconBoxClasses}">
+                            <i class="fa-solid ${cat.icon}"></i>
+                        </div>
+                        <div class="font-semibold text-xs sm:text-sm leading-snug line-clamp-2">${cat.name}</div>
+                        <span class="text-[11px] font-medium ${countClasses}">${cat.count} หัวข้อ</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectCategory(catId) {
+            currentCategory = catId;
+            renderCategories();
+            renderProblems();
+            
+            // Smooth scroll to problem list if not visible
+            const probSection = document.getElementById('problems-section');
+            if (probSection) {
+                const yOffset = -90;
+                const y = probSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+        }
+
+        // ---------------------------------------------------------------------
+        // 7. REAL-TIME SEARCH
+        // ---------------------------------------------------------------------
+        function handleSearch(value) {
+            currentSearchQuery = value.trim().toLowerCase();
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (currentSearchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            // Ensure user sees results on home view
+            if (document.getElementById('home-content-view').classList.contains('hidden')) {
+                navigateToHome();
+            }
+
+            renderProblems();
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('global-search-input');
+            input.value = '';
+            currentSearchQuery = '';
+            document.getElementById('clear-search-btn').classList.add('hidden');
+            renderProblems();
+        }
+
+        function resetFilters() {
+            currentCategory = 'all';
+            clearSearch();
+            renderCategories();
+            renderProblems();
+        }
+
+        // ---------------------------------------------------------------------
+        // 8. RENDER PROBLEM CARDS
+        // ---------------------------------------------------------------------
+        function renderProblems() {
+            const grid = document.getElementById('problem-cards-grid');
+            const noResults = document.getElementById('no-results-box');
+            const titleEl = document.getElementById('problems-list-title');
+            const countEl = document.getElementById('problems-count-text');
+            const resetBtn = document.getElementById('reset-filter-btn');
+
+            const filtered = problemsDatabase.filter(item => {
+                const matchCat = currentCategory === 'all' || item.category === currentCategory;
+                const matchSearch = !currentSearchQuery || 
+                    item.title.toLowerCase().includes(currentSearchQuery) ||
+                    item.shortDesc.toLowerCase().includes(currentSearchQuery) ||
+                    item.categoryName.toLowerCase().includes(currentSearchQuery) ||
+                    item.symptoms.some(s => s.toLowerCase().includes(currentSearchQuery)) ||
+                    item.causes.some(c => c.toLowerCase().includes(currentSearchQuery));
+                return matchCat && matchSearch;
+            });
+
+            // Update Header Title & Count
+            const activeCatObj = categoriesData.find(c => c.id === currentCategory);
+            if (currentSearchQuery) {
+                titleEl.textContent = `ผลการค้นหาสำหรับ "${document.getElementById('global-search-input').value}"`;
+            } else if (currentCategory !== 'all') {
+                titleEl.textContent = `หมวดหมู่: ${activeCatObj.name}`;
+            } else {
+                titleEl.textContent = 'รายการปัญหาการเชื่อมต่อทั้งหมด';
+            }
+            countEl.textContent = `พบข้อมูลทั้งหมด ${filtered.length} หัวข้อ`;
+
+            if (currentCategory !== 'all' || currentSearchQuery.length > 0) {
+                resetBtn.classList.remove('hidden');
+            } else {
+                resetBtn.classList.add('hidden');
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            grid.innerHTML = filtered.map(problem => `
+                <div class="bg-white rounded-3xl border border-sage-200/80 shadow-card hover:shadow-hover hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden group">
+                    <!-- Unique Illustration Header -->
+                    <div class="h-48 w-full bg-cream-100 border-b border-sage-100 overflow-hidden relative">
+                        ${getUniqueIllustration(problem.illustration)}
+                        <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 backdrop-blur-sm text-sage-800 text-xs font-semibold shadow-sm border border-sage-200">
+                            ${problem.categoryName}
+                        </span>
+                    </div>
+
+                    <!-- Card Content -->
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2.5">
+                            <h3 class="font-bold text-sage-900 text-lg leading-snug group-hover:text-sage-600 transition-colors">
+                                ${problem.title}
+                            </h3>
+                            <p class="text-sm text-gray-600 leading-relaxed line-clamp-3">
+                                ${problem.shortDesc}
+                            </p>
+                        </div>
+
+                        <div class="pt-3 border-t border-sage-100 flex items-center justify-between">
+                            <span class="text-xs text-sage-600 font-medium flex items-center gap-1.5">
+                                <i class="fa-solid fa-list-ol"></i> 8 ขั้นตอนแก้ไข
+                            </span>
+                            <button onclick="openProblemDetail('${problem.id}')" class="px-4 py-2 rounded-xl bg-sage-100 hover:bg-sage-600 text-sage-800 hover:text-white font-semibold text-sm transition-all flex items-center gap-1.5 cursor-pointer">
+                                <span>อ่านเพิ่มเติม</span>
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ---------------------------------------------------------------------
+        // 9. OPEN PROBLEM DETAILS VIEW (หน้าแสดงรายละเอียดปัญหา)
+        // ---------------------------------------------------------------------
+        function openProblemDetail(problemId) {
+            const problem = problemsDatabase.find(p => p.id === problemId);
+            if (!problem) return;
+
+            document.getElementById('home-content-view').classList.add('hidden');
+            document.getElementById('article-detail-view').classList.add('hidden');
+            const detailView = document.getElementById('problem-detail-view');
+            detailView.classList.remove('hidden');
+
+            document.getElementById('detail-category-badge').textContent = `หมวดหมู่: ${problem.categoryName}`;
+
+            const contentContainer = document.getElementById('problem-detail-content');
+            contentContainer.innerHTML = `
+                <!-- Banner Image & Title -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 border-b border-sage-200 bg-gradient-to-r from-cream-100 to-white">
+                    <div class="lg:col-span-5 h-60 lg:h-auto bg-cream-100 border-b lg:border-b-0 lg:border-r border-sage-200 overflow-hidden">
+                        ${getUniqueIllustration(problem.illustration)}
+                    </div>
+                    <div class="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-center space-y-3">
+                        <div class="inline-flex items-center gap-2 text-xs font-semibold text-sage-600">
+                            <i class="fa-solid fa-book-medical"></i> คู่มือการแก้ไขปัญหาอย่างเป็นขั้นตอน
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-sage-900 leading-tight">
+                            ${problem.title}
+                        </h1>
+                        <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
+                            ${problem.shortDesc}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Body Sections -->
+                <div class="p-6 sm:p-8 md:p-10 space-y-8">
+                    
+                    <!-- Symptoms & Causes Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- อาการที่พบ -->
+                        <div class="bg-cream-100 rounded-2xl p-6 border border-sage-200/80">
+                            <h2 class="font-bold text-sage-900 text-lg flex items-center gap-2.5 mb-4">
+                                <span class="w-8 h-8 rounded-lg bg-sage-600 text-white flex items-center justify-center text-sm">
+                                    <i class="fa-solid fa-eye"></i>
+                                </span>
+                                อาการที่พบ
+                            </h2>
+                            <ul class="space-y-3 text-sm text-gray-700">
+                                ${problem.symptoms.map(s => `
+                                    <li class="flex items-start gap-2.5">
+                                        <i class="fa-solid fa-circle-dot text-sage-600 mt-1 text-xs"></i>
+                                        <span>${s}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+
+                        <!-- สาเหตุของปัญหา -->
+                        <div class="bg-sage-50 rounded-2xl p-6 border border-sage-200/80">
+                            <h2 class="font-bold text-sage-900 text-lg flex items-center gap-2.5 mb-4">
+                                <span class="w-8 h-8 rounded-lg bg-sage-700 text-white flex items-center justify-center text-sm">
+                                    <i class="fa-solid fa-magnifying-glass-chart"></i>
+                                </span>
+                                สาเหตุของปัญหา
+                            </h2>
+                            <ul class="space-y-3 text-sm text-gray-700">
+                                ${problem.causes.map(c => `
+                                    <li class="flex items-start gap-2.5">
+                                        <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-1 text-xs"></i>
+                                        <span>${c}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- วิธีแก้ไขทีละขั้นตอน (เรียงจากง่ายไปซับซ้อน 8 ขั้นตอน) -->
+                    <div class="space-y-5">
+                        <div class="border-b border-sage-200 pb-3">
+                            <h2 class="text-xl sm:text-2xl font-bold text-sage-900 flex items-center gap-2.5">
+                                <i class="fa-solid fa-screwdriver-wrench text-sage-600"></i>
+                                วิธีแก้ไขทีละขั้นตอน (เรียงจากง่ายไปซับซ้อน)
+                            </h2>
+                            <p class="text-xs sm:text-sm text-gray-500 mt-1">กรุณาดำเนินการตามลำดับขั้นตอนที่ 1 ถึง 8 เพื่อความปลอดภัยและตรงจุด</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            ${problem.steps.map(step => `
+                                <div class="bg-white rounded-2xl p-5 border border-sage-200 shadow-sm hover:border-sage-400 transition-colors">
+                                    <div class="flex items-start gap-4">
+                                        <div class="w-9 h-9 rounded-xl bg-sage-600 text-white font-bold flex items-center justify-center shrink-0 shadow-sm">
+                                            ${step.stepNum}
+                                        </div>
+                                        <div class="flex-1 space-y-2">
+                                            <h3 class="font-bold text-sage-900 text-base sm:text-lg">${step.title}</h3>
+                                            <p class="text-sm text-gray-600 leading-relaxed">${step.detail}</p>
+                                            
+                                            ${step.command ? `
+                                                <div class="mt-3 bg-sage-900 text-cream-100 rounded-xl p-4 space-y-2">
+                                                    <div class="flex items-center justify-between gap-2">
+                                                        <span class="text-xs text-sage-300 font-medium">คำสั่งตรวจสอบเครือข่าย (Command Prompt):</span>
+                                                        <button onclick="copyCommand('${step.command}')" class="px-3 py-1 rounded-lg bg-sage-700 hover:bg-sage-600 text-white text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer">
+                                                            <i class="fa-regular fa-copy"></i> คัดลอกคำสั่ง
+                                                        </button>
+                                                    </div>
+                                                    <div class="code-block text-sm sm:text-base font-semibold text-emerald-300 bg-black/30 px-3 py-2 rounded-lg overflow-x-auto">
+                                                        &gt; ${step.command}
+                                                    </div>
+                                                    <p class="text-xs text-sage-200 leading-relaxed pt-1">
+                                                        ${step.cmdExplain}
+                                                    </p>
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- คำแนะนำเพิ่มเติม & ข้อควรระวังในการแก้ไขปัญหา -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+                        <!-- คำแนะนำเพิ่มเติม -->
+                        <div class="bg-sage-100/80 rounded-2xl p-5 border border-sage-300">
+                            <h3 class="font-bold text-sage-900 text-base flex items-center gap-2 mb-2">
+                                <i class="fa-solid fa-lightbulb text-sage-700"></i>
+                                คำแนะนำเพิ่มเติม
+                            </h3>
+                            <p class="text-sm text-sage-800 leading-relaxed">
+                                ${problem.tips}
+                            </p>
+                        </div>
+
+                        <!-- ข้อควรระวัง -->
+                        <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200">
+                            <h3 class="font-bold text-amber-900 text-base flex items-center gap-2 mb-2">
+                                <i class="fa-solid fa-shield-exclamation text-amber-600"></i>
+                                ข้อควรระวังในการแก้ไขปัญหา
+                            </h3>
+                            <p class="text-sm text-amber-900/90 leading-relaxed">
+                                ${problem.caution}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Back Buttons -->
+                    <div class="pt-6 border-t border-sage-200 flex flex-wrap items-center justify-between gap-3">
+                        <button onclick="closeDetailView()" class="px-5 py-3 rounded-xl bg-cream-100 hover:bg-sage-100 text-sage-800 border border-sage-200 font-semibold text-sm transition-all flex items-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-arrow-left"></i> ย้อนกลับหน้ารายการ
+                        </button>
+                        <button onclick="navigateToHome()" class="px-6 py-3 rounded-xl bg-sage-600 hover:bg-sage-700 text-white font-semibold text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-house"></i> กลับหน้าหลัก
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function closeDetailView() {
+            document.getElementById('problem-detail-view').classList.add('hidden');
+            document.getElementById('home-content-view').classList.remove('hidden');
+            navigateToSection('problems-section');
+        }
+
+        // ---------------------------------------------------------------------
+        // 10. RENDER & OPEN KNOWLEDGE ARTICLES
+        // ---------------------------------------------------------------------
+        function renderArticles() {
+            const grid = document.getElementById('articles-grid');
+            grid.innerHTML = articlesData.map(article => `
+                <div class="bg-cream-50 rounded-3xl border border-sage-200/80 shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden flex flex-col">
+                    <div class="h-44 w-full border-b border-sage-100 overflow-hidden">
+                        ${getUniqueIllustration(article.illustration)}
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2.5">
+                            <div class="flex items-center justify-between text-xs text-sage-600 font-medium">
+                                <span class="px-2.5 py-1 rounded-lg bg-sage-100 text-sage-800">${article.tag}</span>
+                                <span><i class="fa-regular fa-clock mr-1"></i>${article.readTime}</span>
+                            </div>
+                            <h3 class="font-bold text-sage-900 text-lg leading-snug">${article.title}</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed">${article.summary}</p>
+                        </div>
+                        <button onclick="openArticleDetail('${article.id}')" class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-sage-600 text-sage-800 hover:text-white border border-sage-200 font-semibold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer">
+                            <span>อ่านบทความ</span>
+                            <i class="fa-solid fa-book-open text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openArticleDetail(articleId) {
+            const article = articlesData.find(a => a.id === articleId);
+            if (!article) return;
+
+            document.getElementById('home-content-view').classList.add('hidden');
+            document.getElementById('problem-detail-view').classList.add('hidden');
+            const artView = document.getElementById('article-detail-view');
+            artView.classList.remove('hidden');
+
+            const container = document.getElementById('article-detail-content');
+            container.innerHTML = `
+                <div class="h-64 sm:h-72 w-full bg-cream-100 border-b border-sage-200 overflow-hidden">
+                    ${getUniqueIllustration(article.illustration)}
+                </div>
+                <div class="p-6 sm:p-10 space-y-6">
+                    <div class="flex items-center gap-3 text-xs font-semibold text-sage-600">
+                        <span class="px-3 py-1 rounded-full bg-sage-100 text-sage-800">${article.tag}</span>
+                        <span><i class="fa-regular fa-clock mr-1"></i>${article.readTime}</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-sage-900 leading-tight">${article.title}</h1>
+                    <p class="text-base text-gray-600 leading-relaxed border-l-4 border-sage-500 pl-4 bg-cream-100 py-3 rounded-r-xl">
+                        ${article.summary}
+                    </p>
+                    <div class="space-y-5 pt-2">
+                        ${article.content.map(sec => `
+                            <div class="bg-cream-50 p-5 rounded-2xl border border-sage-100 space-y-2">
+                                <h3 class="font-bold text-sage-900 text-lg">${sec.heading}</h3>
+                                <p class="text-sm sm:text-base text-gray-700 leading-relaxed">${sec.text}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="pt-6 border-t border-sage-200 flex justify-between">
+                        <button onclick="closeArticleView()" class="px-5 py-2.5 rounded-xl bg-cream-100 hover:bg-sage-100 text-sage-800 border border-sage-200 font-semibold text-sm cursor-pointer">
+                            <i class="fa-solid fa-arrow-left mr-1.5"></i> ย้อนกลับ
+                        </button>
+                        <button onclick="navigateToHome()" class="px-5 py-2.5 rounded-xl bg-sage-600 hover:bg-sage-700 text-white font-semibold text-sm cursor-pointer">
+                            <i class="fa-solid fa-house mr-1.5"></i> กลับหน้าหลัก
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function closeArticleView() {
+            document.getElementById('article-detail-view').classList.add('hidden');
+            document.getElementById('home-content-view').classList.remove('hidden');
+            navigateToSection('articles-section');
+        }
+
+        // ---------------------------------------------------------------------
+        // 11. UTILITIES: COPY COMMAND & BACK TO TOP
+        // ---------------------------------------------------------------------
+        function copyCommand(cmdText) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = cmdText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const toast = document.getElementById('copy-toast');
+            document.getElementById('copy-toast-text').textContent = `คัดลอกคำสั่ง "${cmdText}" แล้ว`;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2600);
+        }
+
+        function setupScrollListener() {
+            const backToTopBtn = document.getElementById('back-to-top-btn');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 350) {
+                    backToTopBtn.classList.remove('hidden');
+                } else {
+                    backToTopBtn.classList.add('hidden');
+                }
+            });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
